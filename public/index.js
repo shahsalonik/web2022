@@ -27,10 +27,24 @@ app.get('/it_works',function(req,res){
 
 app.get('/third', function(req,res){
    var obj = {
-       'my_target' : 'Thanks for waiting'
+       'message' : 'Thanks for waiting',
+       'delay_time' : '3000'
    }
    res.render('third_template', obj);
 });
+
+app.get('/something_styled', function(req, res) {
+    var obj = {
+    }
+    res.render('style_template', obj);
+});
+
+app.get('/chance', function(req, res) {
+    var obj = {
+        
+    }
+    res.render('', obj)
+})
 
 
 // -------------- listener -------------- //
