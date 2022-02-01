@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The wait for it page</title>
+</head>
+<body>
+	<h2>Hi!</h2>
+	
+	<div>
+	    <p>Wait for it...
+	    <span id="my_target"></span>
+	    </p>
+	</div>
+	
+	<script type="text/javascript">
+        setTimeout(function(){
+            
+            var s = document.getElementById('my_target');
+            s.innerHTML = '{{message}}';
+            
+        }, {{delay_time}})
+	</script>
+</body>
+</html>
