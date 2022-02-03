@@ -40,12 +40,35 @@ app.get('/something_styled', function(req, res) {
 });
 
 app.get('/chance', function(req, res) {
-    var obj = {
-        
+    
+    var x = Math.random();
+    
+    if (x < 0.5) {
+        var win = {
+            'win_key' : 'Hello world, you won!'
+        }
+        res.render('win_template', win);
     }
-    res.render('', obj)
+    else {
+        var lose = {
+            'lose_key' : 'Hello world, you lost!'
+        }
+        res.render('lose_template', lose);
+    }
+    
 })
 
+app.get('/list_render', function(req,res){
+   var obj = {
+       thingz : [
+            "Gryffindor",
+            "Huflepuff",
+            "Ravenclaw",
+            "Slytherin",
+           ],
+   }
+   res.render('list', obj);
+});
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
