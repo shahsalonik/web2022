@@ -12,6 +12,8 @@ var hbs = require('hbs')
 app.set('view engine','hbs')
 
 app.use(express.static('static_files'))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/it_works',function(req,res){
    console.log('someone is landing on my page');
@@ -69,6 +71,18 @@ app.get('/list_render', function(req,res){
    }
    res.render('list', obj);
 });
+
+//madlibs lab
+app.get('/madlib_form', function(req,res){
+   res.render('form_template');
+ });
+
+app.post('/form_render', function(req,res){
+   console.log(req.body)
+   res.render('madlib');
+});
+
+
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
