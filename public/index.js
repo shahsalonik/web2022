@@ -78,8 +78,32 @@ app.get('/madlib_form', function(req,res){
  });
 
 app.post('/form_render', function(req,res){
-   console.log(req.body)
-   res.render('madlib');
+   console.log(req.body);
+   var render_dict = {
+       'noun' : req.body.noun
+   }
+   render_dict['adjective'] = req.body.adjective;
+   render_dict['person'] = req.body.person;
+   if(value.equals("10")) {
+       render_dict['verb'] = "running";
+   }
+   else if (value.equals("11")) {
+       render_dict['verb'] = "flying";
+   }
+   else {
+       render_dict['verb'] = "swimming";
+   }
+   
+   if(value.equals("tree")) {
+       render_dict['location'] = "tree";
+   }
+   else if (value.equals("lake")) {
+       render_dict['location'] = "lake";
+   }
+   else {
+       render_dict['location'] = "mountain";
+   }
+   res.render('madlib', render_dict);
 });
 
 
