@@ -84,25 +84,37 @@ app.post('/form_render', function(req,res){
    }
    render_dict['adjective'] = req.body.adjective;
    render_dict['person'] = req.body.person;
-   if(value.equals("10")) {
+   
+   if(req.body["verb-list"] == 10) {
        render_dict['verb'] = "running";
    }
-   else if (value.equals("11")) {
+   else if (req.body["verb-list"] == 11) {
        render_dict['verb'] = "flying";
    }
-   else {
+   else if (req.body["verb-list"] == 12) {
        render_dict['verb'] = "swimming";
    }
-   
-   if(value.equals("tree")) {
-       render_dict['location'] = "tree";
+   else {
+       render_dict['verb'] = "walking";
    }
-   else if (value.equals("lake")) {
+   
+   if(req.body["picture-selection"] == 1) {
+       render_dict['location'] = "tree";
+       render_dict['location_url'] = "img/tree.jpg";
+   }
+   else if (req.body["picture-selection"] == 2) {
        render_dict['location'] = "lake";
+       render_dict['location_url'] = "img/lake.jpg";
+   }
+   else if (req.body["picture-selection"] == 3) {
+       render_dict['location'] = "mountain";
+       render_dict['location_url'] = "img/mountain.jpg";
    }
    else {
-       render_dict['location'] = "mountain";
+       render_dict['location'] = "park";
+       render_dict['location_url'] = "img/tree.jpg";
    }
+   
    res.render('madlib', render_dict);
 });
 
