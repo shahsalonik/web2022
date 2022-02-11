@@ -1,0 +1,35 @@
+body {
+    background-color: #000000;
+}
+
+.header {
+  padding: 20px;
+  text-align: center;
+  background: #FFE2D6;
+  color: black;
+  font-size: 20px;
+}
+
+.navbar {
+    overflow: hidden;
+    background-color: black ;
+}
+
+.navbar h3 {
+    color: #F2F2F2;
+    display: inline;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: #F2F2F2;
+    text-align: center;
+    padding: 10px 12px;
+}
+
+.navbar a:hover {
+    background-color: #F2F2F2;
+    color: black;
+}
+
