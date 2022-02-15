@@ -21,6 +21,9 @@ app.use(home);
 const madlib = require('./routes/madlib.js')
 app.use('/', madlib);
 
+const numbers = require('./routes/numbers.js')
+app.use('/numbers', numbers);
+
 app.use(express.static('static_files'))
 
 // -------------- listener -------------- //
