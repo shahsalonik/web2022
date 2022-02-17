@@ -25,19 +25,30 @@ router.get('/:numbers', function(req,res) {
     
     var num_req = req.params.numbers;
     
-    var number_info = {
-        'num' : num_req
-    }
-    
     if(isNaN(Math.sqrt(num_req))) {
-        res.render('nan_template')
+        res.render('nan_template');
+    }
+    else if("format" in req.query) {
+        if(req.query.format == "json") {
+            var number_dict = {
+                number : num_req,
+                square_root : Math.sqrt(num_req),
+                squared : Math.pow(num_req, 2),
+                natural_log : Math.log(num_req)
+            }
+            res.json(number_dict);
+        }
     }
     else {
-        number_info['sqrt'] = Math.sqrt(num_req);
-        number_info['square'] = Math.pow(num_req, 2);
-        number_info['ln'] = Math.log(num_req);
+        var number_info = {
+            'num' : num_req,
+            'sqrt' : Math.sqrt(num_req),
+            'square' : Math.pow(num_req, 2),
+            'ln' : Math.log(num_req)
+        }
         res.render('numbers_template', number_info);
     }
+    
 });
 
 module.exports = router;
