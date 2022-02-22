@@ -1,0 +1,13 @@
+These are just some notes that I took based on the inital days of web.
+
+- if you're adding a new template (into views) or modifying index.js in any capacity, always make sure to restart the server.
+
+steps to push to git:
+- intialize the repo (only the first time)
+
+- add the files you modified using git add . (ONLY DO git add . IF YOU'RE IN /public !!! IF YOU'RE NOT, THEN cd public/ FIRST!!!)
+- run git commit -m "your message"
+- push to remote using git push origin main (NOTE: the remote branch isn't master--it's main)
+
+general convention:
+- css files are usually put into the static_files directory because nothing ever changes (unless it's the username, in which case you can populate it using handlebars notation)
