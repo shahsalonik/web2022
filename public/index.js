@@ -24,6 +24,12 @@ app.use('/', madlib);
 const numbers = require('./routes/numbers.js')
 app.use('/numbers', numbers);
 
+const schedule = require('./routes/schedule.js')
+app.use('/schedule', schedule);
+
+const weather = require('./routes/weather.js')
+app.use('/weather', weather);
+
 app.use(express.static('static_files'))
 
 // -------------- listener -------------- //
