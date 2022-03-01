@@ -1,69 +1,43 @@
 const express = require('express');
 var router = express.Router();
 
-var https = require('https');
-var url = 'https://ion.tjhsst.edu/api/schedule'
-
-var options = { 
-	headers : {
-		'User-Agent': 'request'
-	}
-}
-console.log('A');
-https.get(url, options, function(response) {
-	console.log('B')
-	var rawData = '';
-	response.on('data', function(chunk) {
-		console.log('C')
-		rawData += chunk;
-	});
-	console.log('D')
-	response.on('end', function() {
-		console.log('E')
-console.log(rawData); // THIS IS WHERE YOU HAVE ACCESS TO RAW DATA
-obj = JSON.parse(rawData);
-});
-	console.log('F')
-}).on('error', function(e) {
-	console.error(e);
-});
-console.log('G')
-
 router.get('/', function(req, res) {
-    var render_info = {
-        
+    var https = require('https');
+    var url = 'https://ion.tjhsst.edu/api/schedule?format=json'
+    
+    var options = { 
+    	headers : {
+    		'User-Agent': 'request'
+    	}
     }
-    res.render('schedule', render_info);
+
+    https.get(url, options, function(response) {
+    	var rawData = '';
+    	response.on('data', function(chunk) {
+    		rawData += chunk;
+    	});
+    	response.on('end', function() {
+            console.log(rawData); // THIS IS WHERE YOU HAVE ACCESS TO RAW DATA
+            var obj = JSON.parse(rawData);
+            console.log(obj);
+            
+            var render_info = {
+                'date' : obj.results[0].date,
+                'name' : obj.results[0].day_type.name,
+                schedule : obj.results[0].day_type.blocks
+            }
+            console.log(render_info);
+            console.log(obj);
+            res.render('schedule', render_info);
+            
+            
+        });
+    }).on('error', function(e) {
+    	console.error(e);
+    })
+    
+    
     
 });
-
-/*var c_checkAuth = function(req, res, next) {
-  res.locals.username = 'Paul'
-  res.locals.authenticated = true;
-  next();
-}
-
-var c_checkVisits = function(req, res) {
-    res.locals.visit_count = req.cookie.visits
-    next()
-}
-
-var c_validateAuth = function(req,res) {
-  if (res.locals.visit_count > 5) {
-     if (res.locals.authenticated == false) {
-        return res.render('unauthorized');
-     }
-  }
-  
-  var render_dictionary = {
-    'uname' : res.locals.username,
-    'authenticated' : res.locals.authenticated,
-    'visits' : res.locals.visit_count   
-      
-  }
-  res.render('nan_template'. render_dictionary);
-});
-
-app.get('/foo', [c_checkAuth, c_checkVisits, c_validateAuth] )*/
 
 module.exports = router;
