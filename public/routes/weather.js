@@ -1,14 +1,12 @@
 const express = require('express');
 var router = express.Router();
+var https = require('https');
 
 router.get('/', function(req, res){
     res.render('weather_form');
 });
 
-
-router.get('/form_render', function(req, res) {
-    var https = require('https');
-    
+router.post('/form_render', function(req, res) {
     const {lat, long} = req.query;
     var url = 'https://api.weather.gov/points/' + lat + ',' + long;
     
@@ -38,19 +36,22 @@ router.get('/form_render', function(req, res) {
     })
     
     function fetchForecastInfo(properties) {
-        https.get(url, options, function(response) {
-        var weather_info = '';
-        response.on('data', function(chunk) {
-    		weather_info += chunk;
-    	});
-    	
-    	response.on('end', function() {
-    	    var weather_dict = {
-    	        'location' : obj.properties.properties.city + ', ' + obj.properties.properties.state,
-    	        forecast : obj.properties.period[0]
-            }
+        https.get(properties, options, function(response) {
+            var weather_info = '';
+            response.on('data', function(chunk) {
+    		    weather_info += chunk;
+    	   });
+            	
+    	    response.on('end', function() {
+    	        var obj = JSON.parse(rawData);
+    	        var weather_dict = {
+    	            'location' : obj.properties.properties.city + ', ' + obj.properties.properties.state,
+    	            forecast : obj.properties.period[0]
+                }
                 res.render('weather', weather_dict);
     	    });
+        }).on('error', function(e) {
+            console.error(e);
         });
     }
     
