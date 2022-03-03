@@ -1,9 +1,16 @@
 const express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res, obj) {
+router.get('/', function(req, res){
+    res.render('weather_form');
+});
+
+
+router.get('/form_render', function(req, res) {
     var https = require('https');
-    var url = 'https://ion.tjhsst.edu/api/schedule'
+    
+    const {lat, long} = req.query;
+    var url = 'https://api.weather.gov/points/' + lat + ',' + long;
     
     var options = { 
     	headers : {
@@ -18,15 +25,36 @@ router.get('/', function(req, res, obj) {
     	});
     	response.on('end', function() {
             console.log(rawData); // THIS IS WHERE YOU HAVE ACCESS TO RAW DATA
-            obj = JSON.parse(rawData);
-            var render_info = {
-                'date' : obj.results.date,
+            var obj = JSON.parse(rawData);
+            if('status' in obj) {
+                res.render('no_forecast');
             }
-            res.render('schedule', render_info);
+            else {
+                fetchForecastInfo(obj.properties.forecast);
+            }
         });
     }).on('error', function(e) {
     	console.error(e);
     })
+    
+    function fetchForecastInfo(properties) {
+        https.get(url, options, function(response) {
+        var weather_info = '';
+        response.on('data', function(chunk) {
+    		weather_info += chunk;
+    	});
+    	
+    	response.on('end', function() {
+    	    var weather_dict = {
+    	        'location' : obj.properties.properties.city + ', ' + obj.properties.properties.state,
+    	        forecast : obj.properties.period[0]
+            }
+                res.render('weather', weather_dict);
+    	    });
+        });
+    }
+    
+    
     
 });
 
