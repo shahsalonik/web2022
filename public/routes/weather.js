@@ -6,7 +6,8 @@ router.get('/', function(req, res){
     res.render('weather_form');
 });
 
-router.post('/form_render', function(req, res) {
+router.get('/form_render', function(req, res) {
+    console.log(req.query)
     const {lat, long} = req.query;
     var url = 'https://api.weather.gov/points/' + lat + ',' + long;
     
@@ -28,6 +29,9 @@ router.post('/form_render', function(req, res) {
                 res.render('no_forecast');
             }
             else {
+                res.locals.city = obj.properties.properties.city;
+                res.locals.state = obj.properties.properties.state;
+            }
                 fetchForecastInfo(obj.properties.forecast);
             }
         });
@@ -43,10 +47,11 @@ router.post('/form_render', function(req, res) {
     	   });
             	
     	    response.on('end', function() {
-    	        var obj = JSON.parse(rawData);
+    	        console.log(weather_info)
+    	        var weather_obj = JSON.parse(weather_info);
     	        var weather_dict = {
-    	            'location' : obj.properties.properties.city + ', ' + obj.properties.properties.state,
-    	            forecast : obj.properties.period[0]
+    	            'location' : res.locals.city + ", " res.locals.state,
+    	            forecast : weather_obj.properties.periods
                 }
                 res.render('weather', weather_dict);
     	    });
