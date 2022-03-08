@@ -31,7 +31,13 @@ router.get('/form_render', function(req, res, obj) {
             else {
                 res.locals.city = obj.properties.relativeLocation.properties.city;
                 res.locals.state = obj.properties.relativeLocation.properties.state;
-                fetchForecastInfo(obj.properties.forecast);
+                
+                if(obj.properties.forecast === null) {
+                    res.render('no_forecast');
+                }
+                else {
+                    fetchForecastInfo(obj.properties.forecast);
+                }
             }
             })
         }).on('error', function(e) {
@@ -52,8 +58,9 @@ router.get('/form_render', function(req, res, obj) {
     	            'city' : res.locals.city,
     	            'state' : res.locals.state,
     	            forecast : weather_obj.properties.periods,
-                };
-                res.render('weather', weather_dict);
+    	            
+    	        };
+    	        res.render('weather', weather_dict);
     	    });
         }).on('error', function(e) {
             console.error(e);

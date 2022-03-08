@@ -3,34 +3,63 @@
 // -------------- load packages -------------- //
 // INITIALIZATION STUFF
 
-console.log('hello world')
+console.log('hello world');
 
-var express = require('express')
+var express = require('express');
 var app = express();
 
-var hbs = require('hbs')
-app.set('view engine','hbs')
+var hbs = require('hbs');
+app.set('view engine','hbs');
+
+var mysql = require('mysql');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+var sql_params = {
+  connectionLimit : 10,
+  user            : process.env.DIRECTOR_DATABASE_USERNAME,
+  password        : process.env.DIRECTOR_DATABASE_PASSWORD,
+  host            : process.env.DIRECTOR_DATABASE_HOST,
+  port            : process.env.DIRECTOR_DATABASE_PORT,
+  database        : process.env.DIRECTOR_DATABASE_NAME
+}
+
+app.locals.pool  = mysql.createPool(sql_params);
+
+
+app.get('/', function(req,res){
+
+    var sqlQuery = 'SELECT * from puppies;'
+    res.app.locals.pool.query(sqlQuery, function(error,results,fields){
+
+        res.json(results)
+        
+    })
+
+    
+})
+
+
+
 // -------------- routes -------------- //
-const home = require('./routes/home.js')
+const home = require('./routes/home.js');
 app.use(home);
 
-const madlib = require('./routes/madlib.js')
+const madlib = require('./routes/madlib.js');
 app.use('/', madlib);
 
-const numbers = require('./routes/numbers.js')
+const numbers = require('./routes/numbers.js');
 app.use('/numbers', numbers);
 
-const schedule = require('./routes/schedule.js')
+const schedule = require('./routes/schedule.js');
 app.use('/schedule', schedule);
 
-const weather = require('./routes/weather.js')
+const weather = require('./routes/weather.js');
 app.use('/weather', weather);
 
-app.use(express.static('static_files'))
+app.use(express.static('static_files'));
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
