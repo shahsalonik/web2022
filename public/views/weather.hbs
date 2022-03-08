@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Today's Weather!</title>
+	<title>{{city}}, {{state}} Weather</title>
 </head>
 <body>
-    <h1>Still under construction!!!</h1>
-	<h3>Here is the the weather for today in {{location}}:</h3>
+	<h2>Here is the the weather for today near {{city}}, {{state}}:</h2>
 	
 	<div>
 	    <ul>
 	        {{#each forecast}}
-            <li>{{this.name}} - {{this.temperature}}{{this.temperatureUnit}}<br>{{this.shortForecast}}</li>
+            <li>{{this.name}} - {{this.temperature}}{{this.temperatureUnit}} - {{this.shortForecast}}</li>
             {{/each}}
 	    </ul>
 	</div>
 	
-	<a href="./">Go back</a>
+	<a href="https://user.tjhsst.edu/2023sshah/weather/weather_form">Go back</a>
 	
 </body>
 </html>
