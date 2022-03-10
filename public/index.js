@@ -11,11 +11,11 @@ var app = express();
 var hbs = require('hbs');
 app.set('view engine','hbs');
 
-var mysql = require('mysql');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+var mysql = require('mysql');
 
 var sql_params = {
   connectionLimit : 10,
@@ -29,9 +29,9 @@ var sql_params = {
 app.locals.pool  = mysql.createPool(sql_params);
 
 
-app.get('/', function(req,res){
+app.get('/dinos', function(req,res){
 
-    var sqlQuery = 'SELECT * from puppies;'
+    var sqlQuery = 'SELECT * from dinos;'
     res.app.locals.pool.query(sqlQuery, function(error,results,fields){
 
         res.json(results)
@@ -40,8 +40,6 @@ app.get('/', function(req,res){
 
     
 })
-
-
 
 // -------------- routes -------------- //
 const home = require('./routes/home.js');
@@ -58,6 +56,9 @@ app.use('/schedule', schedule);
 
 const weather = require('./routes/weather.js');
 app.use('/weather', weather);
+
+const dino_votes = require('./routes/votes.js');
+app.use('/dino_votes', dino_votes);
 
 app.use(express.static('static_files'));
 
