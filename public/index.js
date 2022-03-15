@@ -11,9 +11,10 @@ var app = express();
 var hbs = require('hbs');
 app.set('view engine','hbs');
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static('static_files'));
 
 var mysql = require('mysql');
 
@@ -70,7 +71,6 @@ app.use('/weather', weather);
 const dino_votes = require('./routes/votes.js');
 app.use('/dino_votes', dino_votes);
 
-app.use(express.static('static_files'));
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
