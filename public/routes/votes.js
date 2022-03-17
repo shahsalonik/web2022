@@ -23,9 +23,16 @@ router.get('/view_dino_votes', function(req, res) {
     res.app.locals.pool.query(sqlQuery, function(error,results,fields){
         if (error) throw error;
         var sql = "SELECT d_id, d_name, votes FROM dinos;";
-        res.app.locals.pool.query(sqlQuery, function(error,results,fields){
+        res.app.locals.pool.query(sql, function(error,results,fields){
             if (error) throw error;
-            res.render('view_votes', results);
+            console.log(results);
+            var render_dict = {
+                'r_votes' : results[0].votes,
+                'j_votes' : results[1].votes,
+                'a_votes' : results[2].votes,
+            };
+            
+            res.render('view_votes', render_dict);
         });
     });
 
