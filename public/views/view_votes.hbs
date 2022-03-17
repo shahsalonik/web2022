@@ -11,12 +11,10 @@
 	<div>
 	    <ul>
 	        {{#each dino}}
-            <li>{{name}} has {{votes}} votes.</a></li>
+            <li>{{this.d_name}} has {{this.votes}} votes.</a></li>
             {{/each}}
 	    </ul>
 	</div>
-	
-	<a href="./">Go back</a>
 	
 </body>
 </html>

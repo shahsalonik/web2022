@@ -26,9 +26,7 @@ router.get('/view_dino_votes', function(req, res) {
             console.log(obj);
             
             var render_info = {
-                'id' : obj[0].d_id,
-                'name' : obj.d_name,
-                'votes' : obj.votes,
+                dino : obj,
             }
             console.log(render_info);
             console.log(obj);
