@@ -1,13 +1,104 @@
-/* Three image containers (use 25% for four, and 50% for two, etc) */
-.column {
-    float: left;
-    width: 30%;
-    padding: 5px;
+body {
+    background-color: #000000;
 }
 
-/* Clear floats after image containers */
+h1 {
+    color: #FFFFFF;
+    text-align: center;
+}
+
+h3 {
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.column {
+  float: left;
+  width: 30%;
+  padding: 2px 16px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  text-align: center;
+}
+
 .row::after {
-    content: "";
-    clear: both;
-    display: table;
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.button {
+  display: inline-flex;
+  height: 40px;
+  width: 150px;
+  border: 2px solid #BFC0C0;
+  margin: 50px 150px;
+  color: #BFC0C0;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: .8em;
+  letter-spacing: 4px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+a {
+  color: #BFC0C0;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+/* Button Titles */
+
+#rbutton {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#jbutton {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#abutton {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Rex */
+
+#rbutton a {
+  position: relative;
+  transition: all .35s ease-Out;
+}
+
+#rbutton:hover a {
+  color: #FFFFFF;
+}
+
+/* John */
+
+#jbutton a {
+  position: relative;
+  transition: all .35s ease-Out;
+}
+
+#jbutton:hover a {
+  color: #FFFFFF;
+}
+
+/* Asteroid */
+
+#abutton a {
+  position: relative;
+  transition: all .35s ease-Out;
+}
+
+#abutton:hover a {
+  color: #FFFFFF;
 }

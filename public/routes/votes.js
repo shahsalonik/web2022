@@ -18,7 +18,7 @@ router.get('/view_dino_votes', function(req, res) {
         sqlQuery = "UPDATE dinos SET votes = votes + 1 WHERE d_name = 'Asteroid';";
     }
     else {
-        sqlQuery = "";
+        sqlQuery = "UPDATE dinos SET votes = votes WHERE d_name = 'Rex';";
     }
     res.app.locals.pool.query(sqlQuery, function(error,results,fields){
         if (error) throw error;

@@ -4,27 +4,40 @@
 	Dinosaur Voting
 </title>
 <link rel="stylesheet" href="css/voting_lab.css">
+<link rel="stylesheet" href="css/home.css">
 <body>
-    <h1>Still under construction!!!</h1>
-	<h3>Vote for your favorite dinosaur!</h3>
+	<h1>Vote for your favorite dinosaur!</h1>
+	<h3>To vote, click on the dinosaur's name in the button.</h3>
 	
 	<form action="dino_votes/view_dino_votes" method="GET">
-    	<div class="row">
-    	    <div class="column">
-    	        <img src="img/rex.jpg" alt="T-Rex wearing a sweater named Rex" width="250px" height="250px"><br>
-    	        <input type="radio" name="votes" value="0">Rex<br>  
-    	    </div>
-    	    <div class="column">
-    	        <img src="img/john.jpg" alt="Ankylosaurus named John" width="250px" height="250px"><br>
-    	        <input type="radio" name="votes" value="1">John<br>  
-    	    </div>
-    	    <div class="column">
-    	        <img src="img/asteroid.jpg" alt="Brachiosaurus named Asteroid" width="250px" height="250px"><br>
-    	        <input type="radio" name="votes" value="2">Asteroid<br>  
-    	    </div>
-    	</div>
-    	
-    	<button type="submit" value="submit">Submit</button>
+	    <div class="row">
+	        <div class="column">
+	            <img src="img/rex.jpg" alt="T-Rex wearing a sweater named Rex" width="250px" height="250px">
+	        </div>
+	        <div class="column">
+	            <img src="img/john.jpg" alt="Parasaurolophus named John" width="350px" height="250px">
+	        </div>
+	        <div class="column">
+	            <img src="img/asteroid.jpg" alt="Velociraptor named Asteroid" width="350px" height="250px">
+	        </div>
+	    </div>
+	    
+	    <div class="button" id="rbutton">
+	        <div id="slide"></div>
+	        <a href="https://user.tjhsst.edu/2023sshah/dino_votes/view_dino_votes?votes=0">Rex</a>
+	    </div>
+	    
+	    <div class="button" id="jbutton">
+	        <div id="slide"></div>
+	        <a href="https://user.tjhsst.edu/2023sshah/dino_votes/view_dino_votes?votes=1">John</a>
+	    </div>
+	    
+	    <div class="button" id="abutton">
+	        <div id="slide"></div>
+	        <a href="https://user.tjhsst.edu/2023sshah/dino_votes/view_dino_votes?votes=2">Asteroid</a>
+	    </div>
+	    
+	    <a href="./">Go back</a>
     </form>
 	
 </body>

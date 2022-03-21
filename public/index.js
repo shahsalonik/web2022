@@ -29,29 +29,6 @@ var sql_params = {
 
 app.locals.pool  = mysql.createPool(sql_params);
 
-
-app.get('/dinos', function(req,res){
-
-    var sqlQuery = 'SELECT * from dinos;';
-    res.app.locals.pool.query(sqlQuery, function(error,results,fields){
-
-        res.json(results);
-        
-    });
-    
-});
-
-app.get('/dino_votes/view_votes', function(req,res){
-
-    var sqlQuery = 'SELECT * from dino_votes;';
-    res.app.locals.pool.query(sqlQuery, function(error,results,fields){
-
-        res.json(results);
-        
-    });
-    
-});
-
 // -------------- routes -------------- //
 const home = require('./routes/home.js');
 app.use(home);
