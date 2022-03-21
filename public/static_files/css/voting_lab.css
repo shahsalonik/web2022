@@ -30,19 +30,19 @@ h3 {
   display: inline-flex;
   height: 40px;
   width: 150px;
-  border: 2px solid #BFC0C0;
+  border: 2px solid;
   margin: 50px 150px;
   color: #BFC0C0;
   text-transform: uppercase;
   text-align: center;
-  font-size: .8em;
+  font-size: 14px;
   letter-spacing: 4px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-a {
+a:link, a:visited {
   color: #BFC0C0;
   text-decoration: none;
   letter-spacing: 1px;
@@ -70,9 +70,15 @@ a {
 
 /* Rex */
 
-#rbutton a {
+#rbutton a:link, a:visited {
   position: relative;
   transition: all .35s ease-Out;
+  background-color: #000000;
+  color: white;
+  padding: 14px 70px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
 
 #rbutton:hover a {
@@ -81,9 +87,15 @@ a {
 
 /* John */
 
-#jbutton a {
+#jbutton a:link, a:visited {
   position: relative;
   transition: all .35s ease-Out;
+  background-color: #000000;
+  color: white;
+  padding: 14px 70px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
 
 #jbutton:hover a {
@@ -92,9 +104,15 @@ a {
 
 /* Asteroid */
 
-#abutton a {
+#abutton a:link, a:visited {
   position: relative;
   transition: all .35s ease-Out;
+  background-color: #000000;
+  color: white;
+  padding: 14px 70px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
 
 #abutton:hover a {
