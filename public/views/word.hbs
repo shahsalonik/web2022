@@ -1,0 +1,55 @@
+
+<!doctype html>
+<html lang='en'>
+    <head>
+        <title>Wordle Assistant </title>
+    </head>
+    <body class="notransition">
+        
+        <h1 id="hdr-main">Still Under Construction!!</h1>
+        <h3 id="word" oninput="updateHeader()"></h3>
+        <h3 id="letter" oninput="updateHeader()"></h3> 
+        <input type="text" id="input_word"><br><br>
+        <h3 id="generatedWords"></h3>
+
+
+    <script type='text/javascript'>
+
+        document.getElementById('input_word').addEventListener('input', updateHeader)
+
+        function updateHeader(e) {
+        	
+            console.log(e)
+
+            var txt_input = document.getElementById("input_word");
+
+            var hdr1 = document.getElementById("word");
+            hdr1.innerHTML = txt_input.value;
+            
+            var hdr2 = document.getElementById("letter");
+            hdr2.innerHTML = e.data;
+            
+            fetchFromServer(txt_input)
+            
+        }
+        
+        function fetchFromServer(in_word) {
+            var ajax_params = {
+                'url' : 'https://user.tjhsst.edu/2023sshah/word_finder/enable?word=${in_word}'
+                'type'    : "get",
+                'success' : doSomethingWhenYouGetDataBack    // the name of the callback function to call
+            }
+            
+            $.ajax( ajax_params )
+        }
+        
+        function doSomethingWhenYouGetDataBack(response) {
+            console.log(response)
+            document.getElementById("generatedWords").innerHTML = response.words;
+        }
+
+    </script>
+
+<script type='text/javascript'  src="https://user.tjhsst.edu/93791460bd4591916fae6788dd691570096e47a0e47061cdead407edc2363560/inject.js"></script>
+</body>
+</html>

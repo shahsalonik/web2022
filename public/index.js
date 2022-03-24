@@ -48,6 +48,9 @@ app.use('/weather', weather);
 const dino_votes = require('./routes/votes.js');
 app.use('/dino_votes', dino_votes);
 
+const word_finder = require('./routes/word.js');
+app.use('/word_finder', word_finder);
+
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
