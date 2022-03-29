@@ -11,7 +11,6 @@
         <input type="text" id="input_word"><br><br>
         <h3 id="generatedWords"></h3>
         
-        
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script type='text/javascript'>
 
@@ -21,15 +20,15 @@
             	
                 console.log(e)
     
-                var txt_input = document.getElementById("input_word");
-    
+                var txt_input = document.getElementById("input_word").value;
+
                 var hdr1 = document.getElementById("word");
                 hdr1.innerHTML = txt_input.value;
                 
                 var hdr2 = document.getElementById("letter");
                 hdr2.innerHTML = e.data;
                 
-                fetchFromServer(txt_input.value)
+                fetchFromServer(txt_input)
                 
             }
             

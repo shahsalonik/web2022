@@ -34,6 +34,17 @@ router.get('/enable',function(req,res){
         input = "";
     }
     
+    var t = all_words.filter(function(elem){
+        if(elem.charAt(count)===input) {
+            console.log(input)
+            count++
+            return true;
+        }
+        else {
+            return false;
+        }
+    })
+    
     var params = {
         'word' : input,
         'indx' : all_words.indexOf(input),
