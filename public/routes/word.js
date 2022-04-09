@@ -13,72 +13,60 @@ router.get('/some_page',function(req,res){
     res.render('word')
 })
 
-router.get('/json_worker',function(req,res){
-    
-    count += 1;
-    
-    var params = {
-        'hello' : 'world',
-        'c' : count
-    }
-    res.json(params)
-    
-})
-
 router.get('/enable',function(req,res){
     
-    var input1, input2, input3, input4, input5;
-    if ('ltr1' in req.query) {
-        input1 = req.query.ltr1;
-    } 
-    if ('ltr2' in req.query) {
-        input2 = req.query.ltr2;
-    } 
-    if ('ltr3' in req.query) {
-        input3 = req.query.ltr3;
-    } 
-    if ('ltr4' in req.query) {
-        input4 = req.query.ltr4;
-    } 
-    if ('ltr5' in req.query) {
-        input5 = req.query.ltr5;
-    } else {
-        input = "";
-    }
+    var input = req.query.word;
     
+    console.log("Word: " + input);
+    console.log("First: " + input.charAt(0));
     
-    var t1 = all_words.filter(function(elem){
-        return(elem.charAt[0] === input1 || input1 === '');
+    var pass = all_words.filter(function(elem) {
+        return elem.length == 5;
     });
     
-    //add multiple filters
-    var t2 = t1.filter(function(elem) {
-        return(elem.charAt[1] === input2 || input2 === '');
+    //5 word array
+    console.log(pass);
+
+    var passM = pass.filter(function(elem) {
+        return(elem.charAt(0) === input.charAt(0) || input.charAt(0) === "*");
     });
     
-    var t3 = t2.filter(function(elem) {
-        return(elem.charAt[2] === input3 || input3 === '');
+    console.log("M:" + passM);
+    
+    var passA = passM.filter(function(elem) {
+        return(elem.charAt(1) === input.charAt(1) || input.charAt(1) === "*");
     });
     
-    var t4 = t3.filter(function(elem) {
-        return(elem.charAt[3] === input4 || input4 === '');
+    console.log("A:" + passA);
+    
+    var passB = passA.filter(function(elem) {
+        return(elem.charAt(2) === input.charAt(2) || input.charAt(2) === "*");
     });
     
-    var t5 = t4.filter(function(elem) {
-        return(elem.charAt[4] === input5 || input5 === '');
+    console.log("B:" + passB);
+    
+    var passC = passB.filter(function(elem) {
+        return(elem.charAt(3) === input.charAt(3) || input.charAt(3) === "*");
     });
     
-    console.log(t5)
+    console.log("C:" + passC);
+    
+    var passD = passC.filter(function(elem) {
+        return(elem.charAt(4) === input.charAt(4) || input.charAt(4) === "*");
+    });
+    
+    console.log("D:" + passD);
+    
+    /*for(let i = 0; i < pass.length; i++) {
+        passM = pass.filter(function(elem){
+            return (elem.charAt(i) == input.charAt(i) || input.charAt(i) == "*");
+        });
+    }*/
     
     var params = {
-        'ltr1' : input1,
-        'ltr2' : input2,
-        'ltr3' : input3,
-        'ltr4' : input4,
-        'ltr5' : input5,
-        'array' : t5,
+        'array' : passD,
     };
-
+    console.log(params);
     res.json(params);
 
 });
