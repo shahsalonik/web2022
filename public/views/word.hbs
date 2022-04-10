@@ -20,10 +20,10 @@
 	
     function fetchFromServer() {
         var ajax_params = {
-            'url'     : `https://user.tjhsst.edu/2023sshah/word_finder/enable`,
+            'url'     : `https://user.tjhsst.edu/2023sshah/word_finder/enable?word=${document.getElementById("input").value}`,
             'type'    : "get",
             'dataType' : "json",
-            'data' : document.getElementById("input").value,
+            //'data' : document.getElementById("input").value,
             'success' : doSomethingWhenYouGetDataBack    // the name of the callback function to call
         }
         // run AJAX function 
@@ -35,8 +35,8 @@
         var responseArray = Object.values(response)
         console.log(responseArray)
         
-        for(let i = 0; i < response.length; i++) {
-            text += response[i] + ", "
+        for(let i = 0; i < responseArray.length; i++) {
+            text += responseArray[i] + ",  "
         }
         
         console.log(text)

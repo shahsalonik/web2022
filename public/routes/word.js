@@ -18,8 +18,7 @@ router.get('/enable',function(req,res){
     var input = req.query.word;
     
     console.log("Word: " + input);
-    console.log("First: " + input.charAt(0));
-    
+
     var pass = all_words.filter(function(elem) {
         return elem.length == 5;
     });
@@ -56,12 +55,6 @@ router.get('/enable',function(req,res){
     });
     
     console.log("D:" + passD);
-    
-    /*for(let i = 0; i < pass.length; i++) {
-        passM = pass.filter(function(elem){
-            return (elem.charAt(i) == input.charAt(i) || input.charAt(i) == "*");
-        });
-    }*/
     
     var params = {
         'array' : passD,
