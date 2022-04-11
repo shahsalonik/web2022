@@ -51,6 +51,9 @@ app.use('/dino_votes', dino_votes);
 const word_finder = require('./routes/word.js');
 app.use('/word_finder', word_finder);
 
+const cookie = require('./routes/cookie.js');
+app.use('/cookies', cookie);
+
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 

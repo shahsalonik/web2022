@@ -1,0 +1,41 @@
+body {
+    background-color: #000000;
+}
+
+h1 {
+    color: #FFFFFF;
+    text-align: center;
+}
+
+h3 {
+    color: #FFFFFF;
+    text-align: center;
+}
+
+p {
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 25px;
+}
+
+input[type="text"] {
+    text-align: center;
+    margin: 0 auto;
+    left: 50%;
+    display: block;
+    font-size: 25px;
+}
+
+button {
+    text-align: center;
+    margin: 0 auto;
+    left: 50%;
+    display: block;
+    font-size: 20px;
+}
+
+#generatedWords {
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 25px;
+}

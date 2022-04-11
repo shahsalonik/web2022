@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cookie Page</title>
+</head>
+<body>
+	<p>
+	Your current click count is: <span id="clicks">{{clicks}}</span>
+	</p>
+
+	<p>
+	As of the time this page was loaded, you have visited <span id="visits">{{visits}}</span> times.
+	</p>
+
+    <button type="button" onclick="buttonClickCallback()">MORE CLICK COOKIE</button>
+
+    <script type="text/javascript">
+        
+        var COOKIE_NAME = 'clicks';
+        
+        function buttonClickCallback() {
+            //read value
+            var num_clicks_string = readCookieFromBrowser(COOKIE_NAME);
+            
+            // increment value
+            num_clicks = Number(num_clicks_string) + 1;
+            
+            // update display
+            document.getElementById('clicks').innerHTML = num_clicks;
+            
+            // update browser cookie
+            writeCookieToBrowser(COOKIE_NAME,num_clicks);
+            
+        }
+
+
+        function writeCookieToBrowser(cookie_name,cookie_value){
+            // create a string in the cookie format
+            var cookie_string = `${cookie_name}=${cookie_value};path=/`
+            
+            //write the formatted string to the cookie
+            document.cookie = cookie_string;
+        }
+
+
+        function readCookieFromBrowser(cookie_to_parse_out){
+            // read all cookies from browser
+            var decodedCookie = decodeURIComponent(document.cookie);
+            
+            // convert all cookies into an array
+            var all_cookies_array = decodedCookie.split('; ');
+            
+            // find the index that contains our cookie
+            var specific_cookie_row = all_cookies_array.find( function(arr_elem){
+                return arr_elem.startsWith(`${cookie_to_parse_out}=`);
+            })
+            var desired_cookie_key_val = specific_cookie_row.split('=');
+
+            var desired_cookie_key = desired_cookie_key_val[0]
+            var desired_cookie_val = desired_cookie_key_val[1]
+            
+            return desired_cookie_val;
+            
+        }
+        
+
+
+    </script>
+
+</body>
+</html>

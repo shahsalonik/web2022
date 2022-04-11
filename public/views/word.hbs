@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="../css/wordle.css">
 	<title>Wordle Assistant</title>
 </head>
 <body>
 	<h1>Wordle Assistant</h1>
-	<div>
-        <input type="text" id="input"><br>
-        <br>
+	<h3>Enter all the letters you know of IN LOWERCASE. For letters you don't know, enter an asterisk.</h3>
+	<h3>Example: h*l*o </h3>
+	<div id="word">
+        <input type="text" id="input"><br><br>
 	</div>
-    <button type="button" onclick="fetchFromServer()">Search</button>
+    <button type="button" onclick="fetchFromServer()">Help Me!</button>
     <br>
     <div id="generatedWords">
     </div>
@@ -23,7 +25,6 @@
             'url'     : `https://user.tjhsst.edu/2023sshah/word_finder/enable?word=${document.getElementById("input").value}`,
             'type'    : "get",
             'dataType' : "json",
-            //'data' : document.getElementById("input").value,
             'success' : doSomethingWhenYouGetDataBack    // the name of the callback function to call
         }
         // run AJAX function 
@@ -36,7 +37,7 @@
         console.log(responseArray)
         
         for(let i = 0; i < responseArray.length; i++) {
-            text += responseArray[i] + ",  "
+            text += responseArray[i] + "<br>"
         }
         
         console.log(text)

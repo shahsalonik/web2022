@@ -30,31 +30,21 @@ router.get('/enable',function(req,res){
         return(elem.charAt(0) === input.charAt(0) || input.charAt(0) === "*");
     });
     
-    console.log("M:" + passM);
-    
     var passA = passM.filter(function(elem) {
         return(elem.charAt(1) === input.charAt(1) || input.charAt(1) === "*");
     });
-    
-    console.log("A:" + passA);
     
     var passB = passA.filter(function(elem) {
         return(elem.charAt(2) === input.charAt(2) || input.charAt(2) === "*");
     });
     
-    console.log("B:" + passB);
-    
     var passC = passB.filter(function(elem) {
         return(elem.charAt(3) === input.charAt(3) || input.charAt(3) === "*");
     });
     
-    console.log("C:" + passC);
-    
     var passD = passC.filter(function(elem) {
         return(elem.charAt(4) === input.charAt(4) || input.charAt(4) === "*");
     });
-    
-    console.log("D:" + passD);
     
     var params = {
         'array' : passD,
