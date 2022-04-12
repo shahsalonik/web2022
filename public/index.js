@@ -14,6 +14,9 @@ app.set('view engine','hbs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 app.use(express.static('static_files'));
 
 var mysql = require('mysql');

@@ -2,7 +2,25 @@ const express = require('express');
 var router = express.Router();
 
 router.get('', function(req, res) {
+    
+    var cookie_key = 'visitor';
+    
+    if(cookie_key in req.cookies === false) {
+        res.cookie('visitor', 'blergety blerp')
+    }
+    
     res.render('home');
+});
+
+router.get('/cookie', function(req, res) {
+    
+    var cookie_key = 'gingerbreads';
+    
+    if(cookie_key in req.cookies === false) {
+        res.cookie(cookie_key, 0)
+    }
+    
+    res.render('cookieclickr');
 });
 
 router.get('/it_works',function(req,res){
