@@ -17,6 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+var cookieSession  = require('cookie-session')
+
+app.use(cookieSession ({name: 'lockbox', keys: ['superdupersecret'],}));
+
 app.use(express.static('static_files'));
 
 var mysql = require('mysql');

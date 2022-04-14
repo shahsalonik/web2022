@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.get('/clickpage',function(req,res){
     
-    var visits,clicks,loggedIn;
+    var visits,clicks,username;
     
 	// log the incoming cookies
 	console.log( req.cookies )
@@ -21,18 +21,19 @@ router.get('/clickpage',function(req,res){
 	if (!('visits' in req.cookies)) {
 		res.cookie('visits', 1)
 	} else {
-	    
-	    if(visits <= 5) {
-	        visits = Number(req.cookies.visits) + 1;
-	    }
-	    else {
-	    }
-	    res.cookie('visits', visits);
+	    visits = Number(req.cookies.visits) + 1;
+	    res.cookie('visits', visits)
 	}
-
+	
+	if('user' in req.query) {
+	    req.session.user = req.query.user;
+	    username = req.query.user;
+	}
+	
     var params = {
         'clicks' : clicks,
-        'visits' : visits
+        'visits' : visits,
+        'user' : username,
     }
 
 	res.render('cookie',params)

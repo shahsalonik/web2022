@@ -2,37 +2,54 @@
 <html>
 <head>
 	<title>Cookie Page</title>
+	<style>
+	    text {
+	        font-size: 40px;
+	        text-align: center;
+	    }
+	</style>
 </head>
 <body>
+    
 	<p>
-	Your current click count is: <span id="clicks">{{clicks}}</span>
+	As of the time this page was loaded, you have visited <span id="visits">{{visits}}</span> times. 
+	Hello, {{user}}!
 	</p>
 
-	<p>
-	As of the time this page was loaded, you have visited <span id="visits">{{visits}}</span> times.
-	</p>
-
-    <button type="button" onclick="buttonClickCallback()">MORE CLICK COOKIE</button>
+    <text id="clickButton" onclick="buttonClickCallback()">{{clicks}}</text>
+    <p>
+        Log in here: 
+    </p>
+    <form>
+    <label for="user">Username:</label>
+    <input type="text" id="user" name="user"><br><br>
+    <input type="submit" value="Submit">
+    </form>
 
     <script type="text/javascript">
         
         var COOKIE_NAME = 'clicks';
+        var vis = Number({{visits}});
         
         function buttonClickCallback() {
             //read value
             var num_clicks_string = readCookieFromBrowser(COOKIE_NAME);
             
             // increment value
-            num_clicks = Number(num_clicks_string) + 1;
+            if(vis >= 5) {
+                document.getElementById('visits').innerHTML = "PLEASE LOG IN";
+            }
+            else if (vis < 5) {
+                num_clicks = Number(num_clicks_string) + 1;
+                // update display
+                document.getElementById('clickButton').innerHTML = num_clicks;
+                // update browser cookie
+                writeCookieToBrowser(COOKIE_NAME,num_clicks);
+            }
             
-            // update display
-            document.getElementById('clicks').innerHTML = num_clicks;
             
-            // update browser cookie
-            writeCookieToBrowser(COOKIE_NAME,num_clicks);
             
         }
-
 
         function writeCookieToBrowser(cookie_name,cookie_value){
             // create a string in the cookie format
