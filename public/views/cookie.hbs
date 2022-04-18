@@ -2,44 +2,49 @@
 <html>
 <head>
 	<title>Cookie Page</title>
-	<style>
-	    text {
-	        font-size: 40px;
-	        text-align: center;
-	    }
-	</style>
+	<link rel="stylesheet" href="../css/home.css">
+	<link rel="stylesheet" href="../css/cookie.css">
 </head>
 <body>
+    <br><br>
+    <form>
+        <label for="user">Username:</label><br><br>
+        <input type="text" id="user" name="user"><br><br>
+        <input id="login" type="submit" value="Log In" onclick="login()">
+        <button id="logout" onclick="logout()">Log Out</button>
+    </form><br>
     
 	<p>
-	As of the time this page was loaded, you have visited <span id="visits">{{visits}}</span> times. 
-	Hello, {{user}}!
+    	As of the time this page was loaded, you have visited <span id="visits">{{visits}}</span> times. 
+    	Hello, {{user}}!
 	</p>
 
-    <text id="clickButton" onclick="buttonClickCallback()">{{clicks}}</text>
-    <p>
-        Log in here: 
-    </p>
-    <form>
-    <label for="user">Username:</label>
-    <input type="text" id="user" name="user"><br><br>
-    <input type="submit" value="Submit">
-    </form>
+    <p id="clickButton" onclick="buttonClickCallback()">{{clicks}}</p>
 
     <script type="text/javascript">
         
         var COOKIE_NAME = 'clicks';
         var vis = Number({{visits}});
+        var user = "{{user}}";
+        var loggedIn = false;
+        
+        function logout() {
+            loggedIn = false;
+        }
+        
+        function login() {
+            loggedIn = true;
+        }
         
         function buttonClickCallback() {
             //read value
             var num_clicks_string = readCookieFromBrowser(COOKIE_NAME);
             
             // increment value
-            if(vis >= 5) {
-                document.getElementById('visits').innerHTML = "PLEASE LOG IN";
+            if(vis >= 5 && user === "") {
+                document.getElementById('clickButton').innerHTML = "PLEASE LOG IN";
             }
-            else if (vis < 5) {
+            else if (vis < 5 || !(user === "")) {
                 num_clicks = Number(num_clicks_string) + 1;
                 // update display
                 document.getElementById('clickButton').innerHTML = num_clicks;
@@ -80,8 +85,6 @@
             
         }
         
-
-
     </script>
 
 </body>

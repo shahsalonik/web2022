@@ -1,0 +1,29 @@
+text {
+    font-size: 40px;
+    text-align: center;
+    color: white;
+}
+
+p {
+    color: white;
+    text-align: center;
+}
+
+#clickButton {
+    color: white;
+    text-align: center;
+    font-size: 40px;
+}
+
+form {
+    color: white;
+    text-align: center;
+}
+
+#login {
+    margin: 0 5px;
+}
+
+#logout {
+    margin: 0 5px;
+}
