@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS dinos;
+
+CREATE TABLE dinos (d_id INT, d_name VARCHAR(128), votes INT PRIMARY KEY(d_id));
+
+INSERT INTO dinos (d_id, d_name, votes)
+    VALUES
+    (0, 'Rex', 0),
+    (1, 'John', 0),
+    (2, 'Asteroid', 0);
