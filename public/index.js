@@ -61,6 +61,9 @@ app.use('/word_finder', word_finder);
 const cookie = require('./routes/cookie.js');
 app.use('/cookies', cookie);
 
+const oauth = require('./routes/oauth.js');
+app.use('/oauth', oauth);
+
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
