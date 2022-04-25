@@ -7,7 +7,7 @@ const https = require('https');
     
 var ion_client_id = 'i7RB0RdrOh3fmhMBOfZ2O6q3Tzi0DcW33REQRvIh';
 var ion_client_secret = 'BXWYiufbCGJd2aD9Mab20GpkE8iIpfdXIkKVL2756n3aIMGF8SvNczb5xElViFb7WaxPbYW2Yp64fI8rftuYsQGgQmzr1LIWuv5PY5isLjnkDS8z9p4Il7W3mjFUnbSf';
-var ion_redirect_uri = 'https://user.tjhsst.edu/2023sshah/login_worker';    //    <<== you choose this one
+var ion_redirect_uri = 'https://user.tjhsst.edu/2023sshah/oauth/login_worker';    //    <<== you choose this one
 
 // Here we create an oauth2 variable that we will use to manage out OAUTH operations
 
@@ -144,7 +144,7 @@ async function convertCodeToToken(req, res, next) {
     } 
     catch (error) {
         console.log('Access Token Error', error.message);
-         res.send(502); // error creating token
+         res.sendStatus(502); // error creating token
     }
 }
 

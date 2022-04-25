@@ -1,6 +1,8 @@
 const express = require('express');
 var router = express.Router();
 
+const {checkAuthentication} = require('/site/public/routes/oauth.js')
+
 router.get('', function(req, res) {
     
     var cookie_key = 'visitor';
@@ -12,9 +14,7 @@ router.get('', function(req, res) {
     res.render('home');
 });
 
-const {checkAuthentication} = require('/site/public/routes/oauth.js')
-
-router.get('/', checkAuthentication, function(req,res){
+router.get('/oauth', checkAuthentication, function(req,res){
   
   if (res.locals.logged_in) {
     res.render('verified', res.locals)
