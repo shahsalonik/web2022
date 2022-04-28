@@ -5,17 +5,25 @@ const {  AuthorizationCode } = require('simple-oauth2');
 
 const https = require('https');
     
-var ion_client_id = 'i7RB0RdrOh3fmhMBOfZ2O6q3Tzi0DcW33REQRvIh';
-var ion_client_secret = 'BXWYiufbCGJd2aD9Mab20GpkE8iIpfdXIkKVL2756n3aIMGF8SvNczb5xElViFb7WaxPbYW2Yp64fI8rftuYsQGgQmzr1LIWuv5PY5isLjnkDS8z9p4Il7W3mjFUnbSf';
-var ion_redirect_uri = 'https://user.tjhsst.edu/2023sshah/oauth/login_worker';    //    <<== you choose this one
 
 // Here we create an oauth2 variable that we will use to manage out OAUTH operations
 
+// -------------- BEGIN OAUTH CONFIG STUFF -------------- //
+
+//
+//  PARAMATERS FROM ION
+//  YOU GET THESE PARAMETERS BY REGISTERING AN APP HERE: https://ion.tjhsst.edu/oauth/applications/
+
+var ion_client_id = 'i7RB0RdrOh3fmhMBOfZ2O6q3Tzi0DcW33REQRvIh';
+var ion_client_secret = 'BXWYiufbCGJd2aD9Mab20GpkE8iIpfdXIkKVL2756n3aIMGF8SvNczb5xElViFb7WaxPbYW2Yp64fI8rftuYsQGgQmzr1LIWuv5PY5isLjnkDS8z9p4Il7W3mjFUnbSf';
+var ion_redirect_uri = 'https://user.tjhsst.edu/2023sshah/oauth/ion_oauth_login_processor';    //    <<== you choose this one
+
+// Instantiate oauth2 class instance as a variable that we will use to manage out OAUTH operations
 
 var client = new AuthorizationCode({
   client: {
     id: ion_client_id,
-    secret: ion_client_secret
+    secret: ion_client_secret,
   },
   auth: {
     tokenHost: 'https://ion.tjhsst.edu/oauth/',
@@ -24,75 +32,85 @@ var client = new AuthorizationCode({
   }
 });
 
-
-const OAUTH_SCOPE = 'read';
+// This is the link that will be used later on for logging in. This URL takes
+// you to the ION server and asks if you are willing to give read permission to ION.
 
 var authorizationUri = client.authorizeURL({
-    scope: OAUTH_SCOPE,
+    scope: "read",
     redirect_uri: ion_redirect_uri
 });
 
+console.log(authorizationUri)
 
-// console.log(authorizationUri)
+// -------------- END OAUTH CONFIG STUFF -------------- //
 
-function checkAuthentication(req,res,next) {
 
-    res.locals.logged_in = false;
+
+router.get('/oauth', function (req, res) {
+
     if ('authenticated' in req.session) {
-        // the user has logged in
-        res.locals.logged_in = true;
-    } else {
-        res.locals.login_link = authorizationUri;
-    }
-    next()
-}
+		// the cookie is present
+		if (req.session.authenticated === true) {
+			// the user has authenticated
+	        
+			// send them a verified page and stop
+	        return res.render('verified')
 
-async function possiblyRefreshToken(req,res,next) {
+	    }
+    } 
 
-    if ('token' in req.session) {
-        // console.log(req.session.token)
-        var accessToken = client.createToken(req.session.token); //recreate a token (class) instance
-        if (accessToken.expired()) {
-            try {
-                const refreshParams = {
-                    'scope' : OAUTH_SCOPE,
-                };
-        
-                req.session.token = await accessToken.refresh(refreshParams);
-            } catch (error) {
-                console.log('Error refreshing access token: ', error.message);
-                return;
-            }
-        }
-    }
-    next();
-}
+    // if we've made it here, they are unverified
+    res.render('unverified', {'login_link' : authorizationUri})
 
-function getProfile(req,res,next){
+});
+
+
+router.get('/logout', function (req, res) {
     
-    console.log('getProfile')
+    //remove traces of the authentication process
+    delete req.session.authenticated;
+    delete req.session.token;
+    res.redirect('https://user.tjhsst.edu/2023sshah/oauth/oauth');
+
+});
+
+
+router.get('/ion_oauth_login_processor', async function(req, res) { 
+
+	// ----- CODE CREATED PASSED BY ION (OAUTH) IN A GET PARAMETER -----
+    var theCode = req.query.code;
+
+	// ----- req.query.code FROM ION GETS BUNDLED UP INTO AN OBJECT -----
+    var options = {
+        'code': theCode,
+        'redirect_uri': ion_redirect_uri,
+        'scope': 'read'
+     };
     
-    if ('authenticated' in req.session) {
-        var sql = 'SELECT id, ion_username, display_name FROM users where id=?';
-        var params = [req.session.id];
-        res.app.locals.pool.query(sql, params, function(error, results, fields){
-            // console.log(results)
+	// ----- PARAMTERS PASSED BACK TO ION AS YOUR APP 'LOGS IN'  -----
 
-            if (error) throw error;
-            res.locals.ion_username = results[0].ion_username;
-            res.locals.display_name = results[0].display_name;
-            next(); 
-        });
-    } else {
-        next();
+    // needs to be in try/catch
+    try {
+        var accessToken = await client.getToken(options);      // await serializes asyncronous fcn call 
+        res.locals.token = accessToken.token;
+    } 
+    catch (error) {
+        console.log('Access Token Error', error.message);
+        res.send(502); // error creating token
     }
-}
 
 
-// -------------- express 'get' handlers -------------- //
+	// ----- CONFIGURE SOME STUFF IN THE COOKIE TO SHOW THEY ARE LOGGED IN  -----
 
+    req.session.authenticated = true;
+    req.session.token = res.locals.token;
+    
+    res.redirect('https://user.tjhsst.edu/2023sshah/oauth/oauth');
+    
+});
 
-function getUserName(req,res,next) {
+router.get('/my_ion_info', function(req,res){
+
     var access_token = req.session.token.access_token;
     var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
     
@@ -104,56 +122,27 @@ function getUserName(req,res,next) {
       });
     
       response.on('end', function() {
-        res.locals.profile = JSON.parse(rawData);
-        next(); 
+        var profile = JSON.parse(rawData);
+        console.log(profile);
+        
+        var params = {
+            'first_name' : profile.first_name,
+            'full_name' : profile.full_name,
+            'username' : profile.ion_username,
+            'img_link' : profile.picture,
+            'counselor' : profile.counselor.full_name,
+        }
+        console.log(params);
+        res.render('profile', params)
+        
       });
     
     }).on('error', function(err) {
-        next(err)
+        console.log('error', err.message);
+        res.send(502); // error 
     });
 
-}
-
-
-router.get('/logout', function (req, res) {
-    
-    delete req.session.authenticated;
-    res.redirect('https://user.tjhsst.edu/2023sshah');
-
-});
-
-
-// -------------- intermediary login_worker helper -------------- //
-async function convertCodeToToken(req, res, next) {
-    
-    console.log(req.query)
-    var theCode = req.query.code;
-
-    var options = {
-        'code': theCode,
-        'redirect_uri': ion_redirect_uri,
-        'scope': OAUTH_SCOPE
-     };
-  
-    
-    // needed to be in try/catch
-    try {
-        var accessToken = await client.getToken(options);      // await serializes asyncronous fcn call
-        res.locals.token = accessToken.token;
-        next()
-    } 
-    catch (error) {
-        console.log('Access Token Error', error.message);
-         res.sendStatus(502); // error creating token
-    }
-}
-
-function setAuthenticated(req,res,next) {
-    req.session.authenticated = true;
-    req.session.token = res.locals.token;
-    next();
-}
-
+})
 
 function retrieveIonId(req,res,next) {
 
@@ -180,8 +169,8 @@ function retrieveIonId(req,res,next) {
 
         req.session.id = id;
         
-        var sql    = 'INSERT INTO users (id, ion_username, display_name, admin) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE id=id;';
-        var params = [id, ion_username, display_name, admin];
+        var sql    = 'INSERT INTO users (id, ion_username, display_name, nickname, admin) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id=id;';
+        var params = [id, ion_username, display_name, nickname, admin];
         res.app.locals.pool.query(sql, params, function(error, results, fields){
             if (error) throw error;
             next(); 
@@ -194,12 +183,4 @@ function retrieveIonId(req,res,next) {
 
 }
 
-router.get('/login_worker',[convertCodeToToken,setAuthenticated, retrieveIonId], function(req, res) { 
-    
-    res.redirect('https://user.tjhsst.edu/2023sshah');
-    
-});
-
 module.exports = router;
-module.exports.oauth_router = router;
-module.exports.checkAuthentication = [checkAuthentication, possiblyRefreshToken, getProfile];

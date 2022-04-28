@@ -1,12 +1,27 @@
 body {
-  background-color: #FFE2D6;
-  color: #000000; 
+  background-color: #000000;
+  color: #FFFFFF; 
+}
+
+h2 {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
 }
 
 p {
-    color: #509489;
+    color: #FFFFFF;
+    text-align: center;
 }
 
 #span_1 {
     color: #A6E0D7;
 }
+
+a:link, a:visited {
+  color: #A6E0D7;
+  text-decoration: none;
+}
+

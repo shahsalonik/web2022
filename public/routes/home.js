@@ -14,15 +14,6 @@ router.get('', function(req, res) {
     res.render('home');
 });
 
-router.get('/oauth', checkAuthentication, function(req,res){
-  
-  if (res.locals.logged_in) {
-    res.render('verified', res.locals)
-  } else {
-      res.render('unverified', res.locals)
-  }
-})
-
 router.get('/cookie', function(req, res) {
     
     var cookie_key = 'gingerbreads';
