@@ -52,7 +52,45 @@ router.get('/oauth', function (req, res) {
 		// the cookie is present
 		if (req.session.authenticated === true) {
 			// the user has authenticated
-	        
+			
+			var access_token = req.session.token.access_token;
+			var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
+    
+        https.get(profile_url, function(response) {
+        
+          var rawData = '';
+          response.on('data', function(chunk) {
+              rawData += chunk;
+          });
+        
+          response.on('end', function() {
+            var profile = JSON.parse(rawData);
+            res.locals.profile = profile;
+            console.log("**********************")
+            console.log(res.locals.profile)
+            console.log("**********************")
+    
+            var id, ion_username, display_name, user_type, admin;
+            ({id, ion_username, display_name, user_type} = profile);
+    
+            admin = false;
+            if (user_type=='teacher'){
+                admin = true;
+            }
+    
+            req.session.id = id;
+            
+            var sql    = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = nickname';
+            var params = [profile.id, profile.first_name];
+            res.app.locals.pool.query(sql, params, function(error, results, fields){
+                if (error) throw error;
+            });
+          });
+        
+        }).on('error', function(err) {
+            next(err)
+        });
+    			
 			// send them a verified page and stop
 	        return res.render('verified')
 
@@ -72,6 +110,10 @@ router.get('/logout', function (req, res) {
     delete req.session.token;
     res.redirect('https://user.tjhsst.edu/2023sshah/oauth/oauth');
 
+});
+
+router.get('/ion_oauth_login_processor', async function(req, res) {
+    
 });
 
 
@@ -109,6 +151,20 @@ router.get('/ion_oauth_login_processor', async function(req, res) {
     
 });
 
+router.get('/nickname', function(req, res) {
+    const {nickname} = req.query;
+    console.log("nickname: " + nickname)
+
+    var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?';
+    var params = [res.locals.profile.id, nickname, nickname];
+    console.log("fr the nickname: " + nickname)
+    res.app.locals.pool.query(sql, params, function(error, results, fields) {
+        if (error) throw error;
+    });
+    
+    res.redirect('https://user.tjhsst.edu/2023sshah/');
+})
+
 router.get('/my_ion_info', function(req,res){
 
     var access_token = req.session.token.access_token;
@@ -124,63 +180,24 @@ router.get('/my_ion_info', function(req,res){
       response.on('end', function() {
         var profile = JSON.parse(rawData);
         console.log(profile);
-        
-        var params = {
+        console.log("nickname: " + res.locals.nickname);
+        var render_dict = {
             'first_name' : profile.first_name,
             'full_name' : profile.full_name,
             'username' : profile.ion_username,
+            'nickname' : results[indexOf(id)].nickname,
             'img_link' : profile.picture,
             'counselor' : profile.counselor.full_name,
-        }
-        console.log(params);
-        res.render('profile', params)
+        };
         
-      });
+        console.log(render_dict);
+        res.render('profile', render_dict)
     
     }).on('error', function(err) {
         console.log('error', err.message);
         res.send(502); // error 
     });
 
-})
-
-function retrieveIonId(req,res,next) {
-
-    var access_token = req.session.token.access_token;
-    var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
-    
-    https.get(profile_url, function(response) {
-    
-      var rawData = '';
-      response.on('data', function(chunk) {
-          rawData += chunk;
-      });
-    
-      response.on('end', function() {
-        var profile = JSON.parse(rawData);
-
-        var id, ion_username, display_name, user_type, admin;
-        ({id, ion_username, display_name, user_type} = profile);
-
-        admin = false;
-        if (user_type=='teacher'){
-            admin = true;
-        }
-
-        req.session.id = id;
-        
-        var sql    = 'INSERT INTO users (id, ion_username, display_name, nickname, admin) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id=id;';
-        var params = [id, ion_username, display_name, nickname, admin];
-        res.app.locals.pool.query(sql, params, function(error, results, fields){
-            if (error) throw error;
-            next(); 
-        });
-      });
-    
-    }).on('error', function(err) {
-        next(err)
-    });
-
-}
+});
 
 module.exports = router;

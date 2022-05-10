@@ -12,14 +12,20 @@
     <h2>Hello, {{first_name}}! You have successfully logged into your profile page.<br></h2>
     <p>
     	Username: {{username}}<br>
+    	Nickname: {{nickname}}<br>
     	Seems like you were having a great picture day!<br><br>
     	
     	<img src="{{img_link}}" width="300px" height="400px"><br><br>
     	
     	Your counselor is {{counselor}}.<br><br>
     	
-    	Click <a href="./oauth">here</a> to go back.<br><br>
-    	Click <a href="./logout">here</a> to logout.
+        <form action="nickname" method="GET">
+            Enter your nickname here <input type="text" name="nickname" placeholder="nickname !!"><br><br>
+            <button type="submit" value="submit">Submit</button>
+        </form> <br>
+    	
+    	<p>Click <a href="./oauth">here</a> to go back.</p>
+    	<p>Click <a href="./logout">here</a> to logout.</p>
 	</p>
 </body>
 </html>
