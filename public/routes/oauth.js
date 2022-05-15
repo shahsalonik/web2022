@@ -68,8 +68,8 @@ router.get('/oauth', function(req, res) {
                 if(user_type == 'teacher') {
                     admin = true;
                 }
-                
-                var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = profile.nickname;';
+
+                var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?;';
                 var params = [profile.id, profile.first_name];
                 res.app.locals.pool.query(sql, params, function(error, results, fields) {
                     if(error) throw error;
@@ -128,12 +128,13 @@ router.get('/nickname', function(req, res) {
         
         response.on('end', function() {
             var profile = JSON.parse(rawData);
+            
             var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?;';
             var params = [res.locals.profile.id, nickname, nickname];
             res.app.locals.pool.query(sql, params, function(error, results, fields) {
                 if (error) throw error;
             });
-            res.redirect('https://user.tjhsst.edu/2023sshah/');
+            res.redirect('https://user.tjhsst.edu/2023sshah/oauth/my_ion_info');
         }).on('error', function(err) {
             console.log('error', err.message);
             res.send(502);
@@ -151,18 +152,23 @@ router.get('/my_ion_info', function(req, res) {
         response.on('data', function(chunk) {
             rawData += chunk;
         });
-        
+    
         response.on('end', function() {
             var profile = JSON.parse(rawData);
-            var render_dict = {
-                'first_name' : profile.first_name,
-                'full_name' : profile.full_name,
-                'username' : profile.ion_username,
-                'nickname' : "nickname",
-                'img_link' : profile.picture,
-                'counselor' : profile.counselor.full_name,
-            };
-            res.render('profile', render_dict);
+            var sql = "SELECT nickname FROM users WHERE id = ?;";
+            var params = [profile.id]
+            res.app.locals.pool.query(sql, params, function(error,results,fields){
+                if (error) throw error;
+                var render_dict = {
+                    'first_name' : profile.first_name,
+                    'full_name' : profile.full_name,
+                    'username' : profile.ion_username,
+                    'nickname' : results[0]['nickname'],
+                    'img_link' : profile.picture,
+                    'counselor' : profile.counselor.full_name,
+                };
+                res.render('profile', render_dict);
+            });
         }).on('error', function(err) {
             console.log('error', err.message);
             res.send(502);
