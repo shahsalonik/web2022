@@ -33,7 +33,7 @@ var client = new AuthorizationCode({
 });
 
 // This is the link that will be used later on for logging in. This URL takes
-// you to the ION server and asks if you are willing to give read permission to ION.
+// you to the Ion server and asks if you are willing to give read permission to Ion.
 
 var authorizationUri = client.authorizeURL({
     scope: "read",
@@ -42,108 +42,72 @@ var authorizationUri = client.authorizeURL({
 
 console.log(authorizationUri)
 
-// -------------- END OAUTH CONFIG STUFF -------------- //
 
 
-
-router.get('/oauth', function (req, res) {
-
-    if ('authenticated' in req.session) {
-		// the cookie is present
-		if (req.session.authenticated === true) {
-			// the user has authenticated
-			
-			var access_token = req.session.token.access_token;
-			var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
+router.get('/oauth', function(req, res) {
     
-        https.get(profile_url, function(response) {
-        
-          var rawData = '';
-          response.on('data', function(chunk) {
-              rawData += chunk;
-          });
-        
-          response.on('end', function() {
-            var profile = JSON.parse(rawData);
-            res.locals.profile = profile;
-            console.log("**********************")
-            console.log(res.locals.profile)
-            console.log("**********************")
-    
-            var id, ion_username, display_name, user_type, admin;
-            ({id, ion_username, display_name, user_type} = profile);
-    
-            admin = false;
-            if (user_type=='teacher'){
-                admin = true;
-            }
-    
-            req.session.id = id;
+    if('authenticated' in req.session) {
+        if(req.session.authenticated === true) {
+            var access_token = req.session.token.access_token;
+            var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token=' + access_token;
             
-            var sql    = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = nickname';
-            var params = [profile.id, profile.first_name];
-            res.app.locals.pool.query(sql, params, function(error, results, fields){
-                if (error) throw error;
+            https.get(profile_url, function(response) {
+                var rawData = '';
+                response.on('data', function(chunk) {
+                    rawData += chunk;
+                });
+                
+                response.on('end', function() {
+                var profile = JSON.parse(rawData);
+                res.locals.profile = profile;
+                
+                var id, ion_username, display_name, user_type, admin;
+                ({id, ion_username, display_name, user_type} = profile);
+                
+                admin = false;
+                if(user_type == 'teacher') {
+                    admin = true;
+                }
+                
+                var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = profile.nickname;';
+                var params = [profile.id, profile.first_name];
+                res.app.locals.pool.query(sql, params, function(error, results, fields) {
+                    if(error) throw error;
+                });
+                });
+            }).on('error', function(err) {
+                next(err);
             });
-          });
+            
+            return res.render('verified');
+            
+        }
         
-        }).on('error', function(err) {
-            next(err)
-        });
-    			
-			// send them a verified page and stop
-	        return res.render('verified')
-
-	    }
-    } 
-
-    // if we've made it here, they are unverified
-    res.render('unverified', {'login_link' : authorizationUri})
-
-});
-
-
-router.get('/logout', function (req, res) {
+    }
+    else {
+        res.render('unverified', {'login_link' : authorizationUri});
+    }
     
-    //remove traces of the authentication process
-    delete req.session.authenticated;
-    delete req.session.token;
-    res.redirect('https://user.tjhsst.edu/2023sshah/oauth/oauth');
-
 });
 
 router.get('/ion_oauth_login_processor', async function(req, res) {
-    
-});
-
-
-router.get('/ion_oauth_login_processor', async function(req, res) { 
-
-	// ----- CODE CREATED PASSED BY ION (OAUTH) IN A GET PARAMETER -----
     var theCode = req.query.code;
-
-	// ----- req.query.code FROM ION GETS BUNDLED UP INTO AN OBJECT -----
+    
     var options = {
         'code': theCode,
-        'redirect_uri': ion_redirect_uri,
-        'scope': 'read'
-     };
+        'redirect_uri' : ion_redirect_uri,
+        'scope': 'read',
+    };
     
-	// ----- PARAMTERS PASSED BACK TO ION AS YOUR APP 'LOGS IN'  -----
-
-    // needs to be in try/catch
     try {
-        var accessToken = await client.getToken(options);      // await serializes asyncronous fcn call 
+        var accessToken = await client.getToken(options);
         res.locals.token = accessToken.token;
-    } 
-    catch (error) {
-        console.log('Access Token Error', error.message);
-        res.send(502); // error creating token
     }
-
-
-	// ----- CONFIGURE SOME STUFF IN THE COOKIE TO SHOW THEY ARE LOGGED IN  -----
-
+    catch(error) {
+        console.log('Access Token Error', error.message);
+        res.send(502);
+    }
+    
     req.session.authenticated = true;
     req.session.token = res.locals.token;
     
@@ -153,51 +117,66 @@ router.get('/ion_oauth_login_processor', async function(req, res) {
 
 router.get('/nickname', function(req, res) {
     const {nickname} = req.query;
-    console.log("nickname: " + nickname)
-
-    var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?';
-    var params = [res.locals.profile.id, nickname, nickname];
-    console.log("fr the nickname: " + nickname)
-    res.app.locals.pool.query(sql, params, function(error, results, fields) {
-        if (error) throw error;
-    });
-    
-    res.redirect('https://user.tjhsst.edu/2023sshah/');
-})
-
-router.get('/my_ion_info', function(req,res){
-
     var access_token = req.session.token.access_token;
     var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
     
     https.get(profile_url, function(response) {
-    
-      var rawData = '';
-      response.on('data', function(chunk) {
-          rawData += chunk;
-      });
-    
-      response.on('end', function() {
-        var profile = JSON.parse(rawData);
-        console.log(profile);
-        console.log("nickname: " + res.locals.nickname);
-        var render_dict = {
-            'first_name' : profile.first_name,
-            'full_name' : profile.full_name,
-            'username' : profile.ion_username,
-            'nickname' : results[indexOf(id)].nickname,
-            'img_link' : profile.picture,
-            'counselor' : profile.counselor.full_name,
-        };
+        var rawData = '';
+        response.on('data', function(chunk) {
+            rawData += chunk;
+        });
         
-        console.log(render_dict);
-        res.render('profile', render_dict)
-    
-    }).on('error', function(err) {
-        console.log('error', err.message);
-        res.send(502); // error 
+        response.on('end', function() {
+            var profile = JSON.parse(rawData);
+            var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?;';
+            var params = [res.locals.profile.id, nickname, nickname];
+            res.app.locals.pool.query(sql, params, function(error, results, fields) {
+                if (error) throw error;
+            });
+            res.redirect('https://user.tjhsst.edu/2023sshah/');
+        }).on('error', function(err) {
+            console.log('error', err.message);
+            res.send(502);
+        });
+        
     });
-
 });
+
+router.get('/my_ion_info', function(req, res) {
+    var access_token = req.session.token.access_token;
+    var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
+    
+    https.get(profile_url, function(response) {
+        var rawData = '';
+        response.on('data', function(chunk) {
+            rawData += chunk;
+        });
+        
+        response.on('end', function() {
+            var profile = JSON.parse(rawData);
+            var render_dict = {
+                'first_name' : profile.first_name,
+                'full_name' : profile.full_name,
+                'username' : profile.ion_username,
+                'nickname' : "nickname",
+                'img_link' : profile.picture,
+                'counselor' : profile.counselor.full_name,
+            };
+            res.render('profile', render_dict);
+        }).on('error', function(err) {
+            console.log('error', err.message);
+            res.send(502);
+        });
+        
+    });
+    
+})
+
+router.get('/logout', function(req, res) {
+    delete req.session.authenticated;
+    delete req.session.token;
+    res.redirect('https://user.tjhsst.edu/2023sshah');
+});
+
 
 module.exports = router;
