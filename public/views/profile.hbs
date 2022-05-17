@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container"> 
-    <h2>Hello, {{first_name}}! You have successfully logged into your profile page.<br></h2>
+    <h2>Hello, {{nickname}}! You have successfully logged into your profile page.<br></h2>
     <p>
     	Username: {{username}}<br>
     	Nickname: {{nickname}}<br>
@@ -20,7 +20,7 @@
     	Your counselor is {{counselor}}.<br><br>
     	
         <form action="nickname" method="GET">
-            Enter your nickname here <input type="text" name="nickname" placeholder="nickname !!"><br><br>
+            Enter your nickname here:  <input type="text" name="nickname" placeholder="{{full_name}}"><br><br>
             <button type="submit" value="submit">Submit</button>
         </form> <br>
     	

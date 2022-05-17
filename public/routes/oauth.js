@@ -69,7 +69,7 @@ router.get('/oauth', function(req, res) {
                     admin = true;
                 }
 
-                var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?;';
+                var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = nickname;';
                 var params = [profile.id, profile.first_name];
                 res.app.locals.pool.query(sql, params, function(error, results, fields) {
                     if(error) throw error;
@@ -130,7 +130,7 @@ router.get('/nickname', function(req, res) {
             var profile = JSON.parse(rawData);
             
             var sql = 'INSERT INTO users(id, nickname) VALUES (?, ?) ON DUPLICATE KEY UPDATE nickname = ?;';
-            var params = [res.locals.profile.id, nickname, nickname];
+            var params = [profile.id, nickname, nickname];
             res.app.locals.pool.query(sql, params, function(error, results, fields) {
                 if (error) throw error;
             });
