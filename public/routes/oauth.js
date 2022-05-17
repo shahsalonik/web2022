@@ -40,9 +40,7 @@ var authorizationUri = client.authorizeURL({
     redirect_uri: ion_redirect_uri
 });
 
-console.log(authorizationUri)
-
-
+console.log(authorizationUri);
 
 router.get('/oauth', function(req, res) {
     
@@ -156,7 +154,7 @@ router.get('/my_ion_info', function(req, res) {
         response.on('end', function() {
             var profile = JSON.parse(rawData);
             var sql = "SELECT nickname FROM users WHERE id = ?;";
-            var params = [profile.id]
+            var params = [profile.id];
             res.app.locals.pool.query(sql, params, function(error,results,fields){
                 if (error) throw error;
                 var render_dict = {
