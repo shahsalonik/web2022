@@ -65,7 +65,7 @@ const oauth = require('./routes/oauth.js');
 app.use('/oauth', oauth);
 
 const points = require('./routes/points.js');
-app.user('/points', points);
+app.use('/points', points);
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
