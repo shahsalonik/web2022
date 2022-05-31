@@ -42,6 +42,8 @@ var authorizationUri = client.authorizeURL({
 
 console.log(authorizationUri);
 
+//renders the oauth page which is where it allows the user to log in
+//renders the verified template after they log in
 router.get('/oauth', function(req, res) {
     
     if('authenticated' in req.session) {
@@ -88,6 +90,9 @@ router.get('/oauth', function(req, res) {
     
 });
 
+//this route is used with the Ion OAuth page
+//the info is redirected here after they authenticate 
+//redirects them to the oauth homepage
 router.get('/ion_oauth_login_processor', async function(req, res) {
     var theCode = req.query.code;
     
@@ -113,6 +118,8 @@ router.get('/ion_oauth_login_processor', async function(req, res) {
     
 });
 
+//allows the user to set their own nickname on the page through a form
+//enters it into a sql table so that it is stored and retrieved when they log in
 router.get('/nickname', function(req, res) {
     const {nickname} = req.query;
     var access_token = req.session.token.access_token;
@@ -141,6 +148,9 @@ router.get('/nickname', function(req, res) {
     });
 });
 
+//this is the actual profile page
+//gets info from the Ion api
+//populates the page with that info
 router.get('/my_ion_info', function(req, res) {
     var access_token = req.session.token.access_token;
     var profile_url = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+access_token;
@@ -174,8 +184,9 @@ router.get('/my_ion_info', function(req, res) {
         
     });
     
-})
+});
 
+//allows the user to log out
 router.get('/logout', function(req, res) {
     delete req.session.authenticated;
     delete req.session.token;

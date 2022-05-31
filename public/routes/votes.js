@@ -1,10 +1,17 @@
 const express = require('express');
 var router = express.Router();
 
+//this renders the default template that the user first sees
+//it has three pictures of dinosaurs on it
+//each of them have a button underneath that will allow the user to click on it to vote
 router.get('/', function(req, res) {
     res.render('dino_votes');
 });
 
+//this is the page where the user can see the votes
+//each dino is assigned a number - rex = 0, john = 1, and asteroid = 2
+//after that, it enters the vote into a sql table, where it keeps a running total
+//finally, it gets the results from the table and displays them on a page 
 router.get('/view_dino_votes', function(req, res) {
     var sqlQuery;
     

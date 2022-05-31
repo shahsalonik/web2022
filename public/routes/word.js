@@ -6,13 +6,15 @@ const path = require('path')
 
 var count = 0;
 
+//word list
 var all_words = fs.readFileSync(path.join('/site','public','data','enable.txt')).toString().split('\n')
 
-
+//renders the word page
 router.get('/some_page',function(req,res){
     res.render('word')
 })
 
+//1st pass: takes out all words > length 5
 router.get('/enable',function(req,res){
     
     var input = req.query.word;

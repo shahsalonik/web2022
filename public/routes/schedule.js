@@ -1,6 +1,9 @@
 const express = require('express');
 var router = express.Router();
 
+//renders the schedule for the day depending on what the Ion api shows
+//gets info in terms of JSON format and picks from it based on that
+//populates page with that info
 router.get('/', function(req, res) {
     var https = require('https');
     var url = 'https://ion.tjhsst.edu/api/schedule?format=json'

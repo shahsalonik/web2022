@@ -3,6 +3,7 @@ var router = express.Router();
 
 const {checkAuthentication} = require('/site/public/routes/oauth.js')
 
+//renders the home page after seeing a visitor
 router.get('', function(req, res) {
     
     var cookie_key = 'visitor';
@@ -14,6 +15,7 @@ router.get('', function(req, res) {
     res.render('home');
 });
 
+//creates a gingerbread cookie and renders the cookieclickr page
 router.get('/cookie', function(req, res) {
     
     var cookie_key = 'gingerbreads';
@@ -25,11 +27,15 @@ router.get('/cookie', function(req, res) {
     res.render('cookieclickr');
 });
 
+//ALL OF THE FOLLOWING ARE ASSIGNMENTS WE STARTED AT THE BEGINNING OF THE YEAR
+
+//prints out 'someone is landing on my page' in the console
 router.get('/it_works',function(req,res){
    console.log('someone is landing on my page');
    res.render('works_template');
 });
 
+//renders the second_template page with an obj parameter
 router.get('/second', function(req,res){
    var obj = {
      'somekey' : 'Hello World, it works!'
@@ -37,6 +43,7 @@ router.get('/second', function(req,res){
    res.render('second_template', obj);
 });
 
+//third_template is rendered with parameters as well
 router.get('/third', function(req,res){
    var obj = {
        'message' : 'Thanks for waiting',
@@ -45,12 +52,14 @@ router.get('/third', function(req,res){
    res.render('third_template', obj);
 });
 
+//allows the user to see the stylesheet for the page
 router.get('/something_styled', function(req, res) {
     var obj = {
     }
     res.render('style_template', obj);
 });
 
+//this renders a win-lose template based on an rng
 router.get('/chance', function(req, res) {
     
     var x = Math.random();
@@ -70,6 +79,7 @@ router.get('/chance', function(req, res) {
     
 });
 
+//this renders a bulleted list on the page
 router.get('/list_render', function(req,res){
    var obj = {
        thingz : [

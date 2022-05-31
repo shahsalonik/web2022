@@ -6,6 +6,8 @@ router.get('/madlib_form', function(req,res){
    res.render('form_template');
  });
 
+//this is what the form goes to after the user submits it on the 'form_template' package
+//it saves all of their answers in a dictionary which it then uses in order to populate the page
 router.post('/form_render', function(req,res){
    console.log(req.body);
    var render_dict = {

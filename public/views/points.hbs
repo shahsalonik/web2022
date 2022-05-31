@@ -12,25 +12,24 @@
            <a class="button" href="javascript:void(0);" onclick="getBook('biography')">Biography</a>
         </p>
         <div id="results"></div>
-    </body>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        function getBook(book) {
-            var ajax_params = {
-                'url' : `https://user.tjhsst.edu/2023sshah/points/sql_ajax_101_worker?book=${book}`,
-                'type' : "get",
-                'success' : onServerResponse
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            function getBook(genre) {
+                var ajax_params = {
+                    'url' : `https://user.tjhsst.edu/2023sshah/points/sql_ajax_101_worker?genre=${genre}`,
+                    'type' : "get",
+                    'success' : onServerResponse
+                }
+                
+                $.ajax(ajax_params)
             }
             
-            $.ajax(ajax_params)
-        }
-        
-        function onServerResponse(responseString) {
-            console.log(responseString)
-            document.getElementById('results').innerHTML = responseString;
-        }
-        
-    </script>
-    <script type='text/javascript' src="https://user.tjhsst.edu/93791460bd4591916fae6788dd691570096e47a0e47061cdead407edc2363560/inject.js"></script>
+            function onServerResponse(responseString) {
+                console.log(responseString)
+                document.getElementById('results').innerHTML = responseString;
+            }
+            
+        </script>
+    </body>
 </html>

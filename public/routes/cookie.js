@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router()
 
-
+//first, this router takes the user to the default page
+//there, it checks whether the clicks cookie has been created (created if false)
+//does the same thing for the visits cookie
+//checks if the user is logged in
+//finally renders the cookie page with all the info
 router.get('/clickpage',function(req,res){
     
     var visits,clicks,username;

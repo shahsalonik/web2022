@@ -2,10 +2,14 @@ const express = require('express');
 var router = express.Router();
 var https = require('https');
 
+//initial page where the user can enter in longitude and latitude
 router.get('/weather_form', function(req, res){
     res.render('weather_form');
 });
 
+//renders the form based on that info by retrieving it from the weather.com api
+//it is initially in JSON form when it is retrieved from the api
+//formats it and populates the page
 router.get('/form_render', function(req, res, obj) {
     console.log(req.query)
     const {lat, long} = req.query;

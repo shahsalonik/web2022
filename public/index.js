@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-var cookieSession  = require('cookie-session')
+var cookieSession  = require('cookie-session');
 
 app.use(cookieSession ({name: 'lockbox', keys: ['superdupersecret'],}));
 
@@ -66,6 +66,9 @@ app.use('/oauth', oauth);
 
 const points = require('./routes/points.js');
 app.use('/points', points);
+
+const states = require('./routes/states.js');
+app.use('/states', states);
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 

@@ -1,6 +1,7 @@
 const express = require('express');
 var router = express.Router();
 
+//has a list of numbers from 1-100
 router.get('/', function(req,res) {
     var num = {
         nums : [
@@ -20,6 +21,9 @@ router.get('/', function(req,res) {
     res.render('numbers', num)
 });
     
+//based on whatever number the user selects, it gets formatted in terms of JSON or no JSON
+//gives them the square root, the square, and the natural log of that number
+//renders the page with the info
 router.get('/:numbers', function(req,res) {
     console.log(req.params.numbers);
     
