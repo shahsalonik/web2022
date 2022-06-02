@@ -9,10 +9,27 @@
               stroke:white;
               pointer-events:all;
           }
+          
+          button {
+              text-align: center;
+              font-size: 30px;
+          }
+          
+          
         </style>
     </head>
     <body>
-        <h2>STATES GAME!</h2>
+        <h1>STATES GAME!</h1>
+        
+        <h2>Time Remaining
+			<span id="remaining_time">0:00</span>
+		</h2>
+		
+		<div id="result"></div>
+        <div id="score"></div>
+        <br>
+        <button id="begin" onclick="begin()">Start Game!</button>
+        <button id="reset" onclick="reset()">Reset Game!</button>
 
         <div class="displayContainer_1" id="states">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593">
@@ -74,20 +91,6 @@
         
         <br>
         
-        <h4>Time Remaining
-			<span id="remaining_time">0:00</span>
-		</h4>
-		
-        <div id="result">
-            
-        </div>
-        <div id="score">
-            
-        </div>
-        <br>
-        <button class="btn btn-primary btn-large" id="begin" onclick="begin()">Start Game!</button>
-        <button class="btn btn-primary btn-large" id="begin" onclick="reset">Reset Game!</button>
-        
         <script type="text/javascript">
             const UNSTARTED = 0;
     		const RUNNING = 1;
@@ -96,6 +99,8 @@
     		const CORRECT = 0;
     		const INCORRECT = 1;
     		const GUESSED = 2;
+    		
+    		var score;
 
             var state_list = document.querySelectorAll('#outlines > path');
             var array_state_list = Array.from(state_list);
@@ -114,6 +119,7 @@
             };
             
             function begin() {
+                document.querySelector('#begin').disabled = true;
                 var state_num = Math.floor( array_state_list.length * Math.random() );
 				game_object.correct_answer = array_state_list[state_num];
 				console.log(game_object.correct_answer)
@@ -125,12 +131,15 @@
             function reset() {
                 if (game_object.lifecycle === FINISHED) {
                     array_state_list.forEach( function(elem){
-                        elem.style.backgroundColor="#D3D3D3"
+                        elem.style['fill']="#D3D3D3"
     				});
 
     				document.getElementById('result').innerHTML="";
     				document.getElementById('score').innerHTML="";
-    
+    				document.querySelector('#begin').disabled = false;
+    				
+    				score = 0;
+    				
     				game_object.lifecycle = UNSTARTED;
 			    }
             }
@@ -177,7 +186,7 @@
     		}
     		
     		function lose() {
-    			document.getElementById('score').innerHTML="You lost :(";
+    			document.getElementById('score').innerHTML= "You lost, but your score was " + score;
     			end_game();
     		}
     		
