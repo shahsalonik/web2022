@@ -68,10 +68,6 @@
                   <path id="WI" name="Wisconsin" fill="#D3D3D3" d="M541.4,109.9 l2.9,0.5 2.9,-0.6 7.4,-3.2 2.9,-1.9 2.1,-0.8 1.9,1.5 -1.1,1.1 -1.9,3.1 -0.6,1.9 1,0.6 1.8,-1 1.1,-0.2 2.7,0.8 0.6,1.1 1.1,0.2 0.6,-1.1 4,5.3 8.2,1.2 8.2,2.2 2.6,1.1 12.3,2.6 1.6,2.3 3.6,1.2 1.7,10.2 1.6,1.4 1.5,0.9 -1.1,2.3 -1.8,1.6 -2.1,4.7 -1.3,2.4 0.2,1.8 1.5,0.3 1.1,-1.9 1.5,-0.8 0.8,-2.3 1.9,-1.8 2.7,-4 4.2,-6.3 0.8,-0.5 0.3,1 -0.2,2.3 -2.9,6.8 -2.7,5.7 -0.5,3.2 -0.6,2.6 0.8,1.3 -0.2,2.7 -1.9,2.4 -0.5,1.8 0.6,3.6 0.6,3.4 -1.5,2.6 -0.8,2.9 -1,3.1 1.1,2.4 0.6,6.1 1.6,4.5 -0.2,3 -15.9,1.8 -17.5,1 h-12.7 l-0.7,-1.5 -2.9,-0.4 -2.6,-1.3 -2.3,-3.7 -0.3,-3.6 2,-2.9 -0.5,-1.4 -2.1,-2.2 -0.8,-3.3 -0.6,-6.8 -2.1,-2.5 -7,-4.5 -3.8,-5.4 -3.4,-1 -2.2,-2.8 h-3.2 l-2.9,-3.3 -0.5,-6.5 0.1,-3.8 1.5,-3.1 -0.8,-3.2 -2.5,-2.8 1.8,-5.4 5.2,-3.8 1.6,-1.9 -0.2,-8.1 0.2,-2.8 2.4,-2.8z"/>
                   <path id="WV" name="West Virginia" fill="#D3D3D3" d="M758.9,254.3 l5.8,-6 2.6,-0.8 1.6,-1.5 1.5,-2.2 1.1,0.3 3.1,-0.2 4.6,-3.6 1.5,-0.5 1.3,1 2.6,1.2 3,3 -0.4,4.3 -5.4,-2.6 -4.8,-1.8 -0.1,5.9 -2.6,5.7 -2.9,2.4 -0.8,2.3 -3,0.5 -1.7,8.1 -2.8,0.2 -1.1,-1 -1.2,-2 -2.2,0.5 -0.5,5.1 -1.8,5.1 -5,11 0.9,1.4 -0.1,2 -2.2,2.5 -1.6,-0.4 -3.1,2.3 -2.8,-0.8 -1.8,4.9 -3.8,1 -2.5,-1.3 -2.5,1.9 -2.3,0.7 -3.2,-0.8 -3.8,-4.5 -3.5,-2.2 -2.5,-2.5 -2.9,-3.7 -0.5,-2.3 -2.8,-1.7 -0.6,-1.3 -0.2,-5.6 0.3,0.1 2.4,-0.2 1.8,-1 v-2.2 l1.7,-1.5 0.1,-5.2 0.9,-3.6 1.1,-0.7 0.4,0.3 1,1.1 1.7,0.5 1.1,-1.3 -1,-3.1 v-1.6 l3.1,-4.6 1.2,-1.3 2,0.5 2.6,-1.8 3.1,-3.4 2.4,-4.1 0.2,-5.6 0.5,-4.8 v-4.9 l-1.1,-3 0.9,-1.3 0.8,-0.7 4.3,19.3 4.3,-0.8 11.2,-1.3z"/>
                   <path id="WY" name="Wyoming" fill="#D3D3D3" d="M353,161.9 l-1.5,25.4 -4.4,44 -2.7,-0.3 -83.3,-9.1 -27.9,-3 2,-12 6.9,-41 3.8,-24.2 1.3,-11.2 48.2,7 59.1,6.5z"/>
-                  <g id="DC">
-                      <path id="DC1" name="Washington, D.C." fill="#D3D3D3" d="M801.8,253.8 l-1.1-1.6 -1-0.8 1.1-1.6 2.2,1.5z"/>
-                      <circle id="DC2" name="Washington, D.C." fill="#D3D3D3" stroke="#FFFFFF" stroke-width="1.5" cx="801.3" cy="251.8" r="5" opacity="0"/> <!-- Set opacity to "0" to hide DC circle -->
-                  </g>
                 </g>
             </svg>  
         </div>
@@ -89,7 +85,8 @@
             
         </div>
         <br>
-        <button class="btn btn-primary btn-large" id="begin" onclick="btn_click">Start Game!</button>
+        <button class="btn btn-primary btn-large" id="begin" onclick="begin()">Start Game!</button>
+        <button class="btn btn-primary btn-large" id="begin" onclick="reset">Reset Game!</button>
         
         <script type="text/javascript">
             const UNSTARTED = 0;
@@ -107,11 +104,8 @@
                 elem.addEventListener("click", btn_click);
             });
             
-            
             var game_object = {
     			'lifecycle' : UNSTARTED,
-    			'correct_answer' : null,
-    			'attempts_remaining' : null,
     			'timer' : {
     				'handle' : null,
     				'callback' : timer_event,
@@ -119,9 +113,27 @@
     			}
             };
             
-            game_object['timer'].seconds = 5;
-            get_timer_and_display()
-            game_object['timer'].handle = setInterval(game_object['timer'].callback, 1000)
+            function begin() {
+                var state_num = Math.floor( array_state_list.length * Math.random() );
+				game_object.correct_answer = array_state_list[state_num];
+				console.log(game_object.correct_answer)
+				game_object['timer'].seconds = 20;
+				get_timer_and_display()
+				game_object['timer'].handle = setInterval(game_object['timer'].callback, 1000)
+            }
+            
+            function reset() {
+                if (game_object.lifecycle === FINISHED) {
+                    array_state_list.forEach( function(elem){
+                        elem.style.backgroundColor="#D3D3D3"
+    				});
+
+    				document.getElementById('result').innerHTML="";
+    				document.getElementById('score').innerHTML="";
+    
+    				game_object.lifecycle = UNSTARTED;
+			    }
+            }
             
             function btn_click() {
                 console.log(this)
@@ -143,7 +155,7 @@
     			get_timer_and_display()
     
     			// end the game if time is up
-    			if (game_object['timer'].seconds < 1) {
+    			if (game_object['timer'].seconds == 0) {
     				lose()
     			}
 		    }
@@ -172,15 +184,6 @@
     		function end_game() {
     			// stop the timer
     			clearInterval(game_object['timer'].handle);
-    
-    			// make the start button appear inactive
-    			var b = document.getElementById('btn_start');
-    			b.style.backgroundColor = "#BBB";
-    
-    			// make the reset button appear active
-    			var r = document.getElementById('btn_reset');
-    			r.style.backgroundColor = "#FF75FF"
-    
     			game_object.lifecycle = FINISHED;
 		    }
             
@@ -189,3 +192,9 @@
         <script type='text/javascript'  src="https://user.tjhsst.edu/93791460bd4591916fae6788dd691570096e47a0e47061cdead407edc2363560/inject.js"></script>
     </body>
 </html>
+
+//TODO: click on as many states as possible within a given interval of time.
+    //timer for 20 seconds (done)
+    //prompt for states (randomly chosen)
+    //count score for every one they get right
+    //emd game if they get the answer wrong
