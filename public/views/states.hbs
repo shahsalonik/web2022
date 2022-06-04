@@ -197,10 +197,10 @@
 		    function process_guess(path) {
 		        var choice = path.getAttribute('name');
 		        if (game_object.correct_answer==choice) {
-					path.style['background-color'] = "green";		//correct
+					path.style['fill'] = "green";		//correct
 					return CORRECT;
 				} else {
-					path.style['background-color'] = "red"		//incorrect
+					path.style['fill'] = "red"		//incorrect
 					return INCORRECT;
 				}
 				
@@ -246,9 +246,3 @@
         <script type='text/javascript'  src="https://user.tjhsst.edu/93791460bd4591916fae6788dd691570096e47a0e47061cdead407edc2363560/inject.js"></script>
     </body>
 </html>
-
-//TODO: click on as many states as possible within a given interval of time.
-    //timer for 20 seconds (done)
-    //prompt for states (randomly chosen)
-    //count score for every one they get right
-    //emd game if they get the answer wrong
