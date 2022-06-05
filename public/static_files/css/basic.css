@@ -28,3 +28,21 @@ a:link, a:visited {
 form {
     text-align: center;
 }
+       
+.buttonContainer {
+    display: flex;
+}
+          
+button {
+    text-align: center;
+    font-size: 30px;
+    margin: auto;
+}
+          
+div {
+    text-align: center;
+}
+          
+#question {
+    font-size: 40px;
+}
