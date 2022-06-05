@@ -15,6 +15,22 @@
               font-size: 30px;
           }
           
+          .buttonContainer {
+              display: flex;
+          }
+          
+          button {
+              margin: auto;
+          }
+          
+          div {
+              text-align: center;
+          }
+          
+          #question {
+              font-size: 40px;
+          }
+          
           
         </style>
     </head>
@@ -27,10 +43,11 @@
 		
 		<div id="question"></div>
 		<div id="result"></div>
-        <div id="score"></div>
         <br>
-        <button id="begin" onclick="begin()">Start Game!</button>
-        <button id="reset" onclick="reset()">Reset Game!</button>
+        <div class="buttonContainer">
+            <button id="begin" onclick="begin()">Start Game!</button>
+            <button id="reset" onclick="reset()">Reset Game!</button>
+        </div>
 
         <div class="displayContainer_1" id="states">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593">
@@ -132,9 +149,6 @@
 				game_object['timer'].seconds = 20;
 				get_timer_and_display()
 				game_object['timer'].handle = setInterval(game_object['timer'].callback, 1000)
-				
-				var response_elem2 = document.getElementById('score');
-                response_elem2.innerHTML = "";
                 
                 fetchFromServer(state_num);
             }
@@ -169,7 +183,7 @@
     				});
 
     				document.getElementById('result').innerHTML="";
-    				document.getElementById('score').innerHTML="";
+    				document.getElementById('question').innerHTML="";
     				document.querySelector('#begin').disabled = false;
     				
     				score = 0;
@@ -236,7 +250,7 @@
     		}
     		
     		function end_game() {
-    			document.getElementById('score').innerHTML= "Your score was " + score;
+    			document.getElementById('question').innerHTML= "Your got " + score + " questions correct!";
     			clearInterval(game_object['timer'].handle);
     			game_object.lifecycle = FINISHED;
 		    }
