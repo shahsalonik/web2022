@@ -9,16 +9,20 @@
               stroke:white;
               pointer-events:all;
           }
+          h3 {
+              text-align: center;
+              font-weight: normal;
+          }
         </style>
     </head>
     <body>
         <h1>STATES GAME!</h1>
-        
-        <h2>Time Remaining
+        <h3>Directions: Click on "Start Game" to begin the game. Click on each state on the map based on the prompt. Get as many points as possible within 20 seconds!</h3>
+        <h1>Time Remaining
 			<span id="remaining_time">0:00</span>
-		</h2>
+		</h1>
 		
-		<div id="question"></div>
+		<div id="question">PROMPTS WILL APPEAR HERE.</div>
 		<div id="result"></div>
         <br>
         <div class="buttonContainer">
@@ -117,6 +121,7 @@
             
             function begin() {
                 document.querySelector('#begin').disabled = true;
+                document.querySelector('#reset').disabled = true;
                 game_object.lifecycle = RUNNING;
                 
                 var state_num = Math.floor( array_state_list.length * Math.random() );
@@ -206,6 +211,7 @@
     
     			// end the game if time is up
     			if (game_object['timer'].seconds == 0) {
+    			    document.querySelector('#reset').disabled = false;
     				end_game()
     			}
 		    }
