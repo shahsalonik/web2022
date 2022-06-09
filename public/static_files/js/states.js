@@ -87,11 +87,18 @@ function on_game_event(e) {
     				
     	if(guess_res===CORRECT) {
     		score++;
+    		document.getElementById('answer').innerHTML = "";
+    	}
+    	else {
+    	    document.getElementById('answer').innerHTML = "You clicked on " + this.getAttribute('name') + " :(";
     	}
     				
     	var state_num = Math.floor( array_state_list.length * Math.random() );
     	game_object.correct_answer = array_state_list[state_num].getAttribute('name');
     	fetchFromServer(state_num);
+    }
+    else {
+        post_game();
     }
 }
 		    
@@ -141,4 +148,9 @@ function end_game() {
 	document.getElementById('question').innerHTML= "Your got " + score + " questions correct!";
 	clearInterval(game_object['timer'].handle);
 	game_object.lifecycle = FINISHED;
+	post_game();
+}
+
+function post_game() {
+    document.getElementById('question').innerHTML = "You clicked on " + this.getAttribute('name') + "!";
 }
